@@ -1,4 +1,4 @@
-package database
+package model
 
 import "github.com/go-playground/log"
 
@@ -35,4 +35,14 @@ func AddLockers(u []*Locker) error {
 		}
 	}
 	return tx.Commit().Error
+}
+
+func GetLockersByUid(id int) ([]*Locker, error) {
+	var lockers []*Locker
+	err := db.
+		Preload("CabinetInfo").
+		Where("Uid = (?) AND Availability = 0", id).
+		Find(&lockers).
+		Error
+	return lockers, err
 }

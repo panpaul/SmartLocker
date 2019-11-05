@@ -31,4 +31,4 @@ run: clean dep server
 	./server s
 
 dep:
-	go get -u -v
+	go get -u ./...

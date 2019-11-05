@@ -1,4 +1,4 @@
-package database
+package model
 
 import "github.com/go-playground/log"
 
@@ -34,4 +34,16 @@ func AddUsers(u []*User) error {
 		}
 	}
 	return tx.Commit().Error
+}
+
+func GetUserInfoById(id int) (*User, error) {
+	var result *User
+	err := db.First(&result, id).Error
+	return result, err
+}
+
+func GetUserInfoByName(username string) (*User, error) {
+	var result *User
+	err := db.Where(&User{Username: username}).Find(&result).Error
+	return result, err
 }

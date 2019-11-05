@@ -3,8 +3,8 @@ package main
 import (
 	"SmartLocker/cmd/server/router"
 	"SmartLocker/config"
-	"SmartLocker/database"
 	"SmartLocker/logger"
+	"SmartLocker/model"
 	"github.com/go-playground/log"
 	"github.com/urfave/cli"
 	"net/http"
@@ -17,7 +17,7 @@ func main() {
 	// init the helpers
 	logger.Setup()
 	config.Setup()
-	database.Setup()
+	model.Setup()
 
 	// create an app instance
 	app := cli.NewApp()
@@ -67,7 +67,7 @@ func StartServer(ctx *cli.Context) {
 	log.Debug(<-ch)
 
 	// Stop the service gracefully.
-	database.CloseDB()
+	model.CloseDB()
 	err := server.Shutdown(nil)
 	if err != nil {
 		log.WithError(err).Warn("Couldn't shutdown the server")
