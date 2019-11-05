@@ -31,3 +31,18 @@ func AddCabinets(c []*Cabinet) error {
 	}
 	return tx.Commit().Error
 }
+
+func GetCabinetsByLocation(where string) ([]int, error) {
+	var c []*Cabinet
+	var r []int
+	err := db.Where(&Cabinet{Location: where}).
+		Find(&c).
+		Error
+	if err != nil {
+		return nil, err
+	}
+	for i := range c {
+		r = append(r, c[i].Id)
+	}
+	return r, nil
+}

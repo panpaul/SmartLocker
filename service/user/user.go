@@ -16,14 +16,16 @@ type User struct {
 }
 
 // fill the blank
-func (u *User) Get() int {
+func (u *User) Get() int { //Param:Id/Username
 	var user *model.User
 	var err error
 
-	if u.Username != "" {
+	if u.Id != 0 {
+		user, err = model.GetUserInfoById(u.Id)
+	} else if u.Username != "" {
 		user, err = model.GetUserInfoByName(u.Username)
 	} else {
-		user, err = model.GetUserInfoById(u.Id)
+		return e.InvalidParams
 	}
 
 	if err != nil {
@@ -38,7 +40,7 @@ func (u *User) Get() int {
 }
 
 // get the user's articles
-func (u *User) getArticles() int {
+func (u *User) getArticles() int { // Param:Id
 	a, err := article.GetArticles(u.Id)
 	if err != e.Success {
 		return err

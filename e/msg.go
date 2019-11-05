@@ -12,6 +12,7 @@ var MsgFlags = map[int]string{
 	PermissionDenied:   "无权限",
 	RegistrationFailed: "注册失败",
 	RegisterDuplicated: "该用户名已被注册",
+	NoMoreLocker:       "该储物柜已满",
 }
 
 func GetMsg(code int) string {

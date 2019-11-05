@@ -1,6 +1,8 @@
 package model
 
-import "github.com/go-playground/log"
+import (
+	"github.com/go-playground/log"
+)
 
 type Locker struct {
 	Id           int     `gorm:"primary_key;not null;index" json:"id"`
@@ -45,4 +47,47 @@ func GetLockersByUid(id int) ([]*Locker, error) {
 		Find(&lockers).
 		Error
 	return lockers, err
+}
+
+func ReleaseLockerById(id int) error {
+	var result *Locker
+	err := db.First(&result, id).Error
+	if err != nil {
+		return err
+	}
+	result.Availability = true
+	result.Uid = 0
+	err = db.Update(&result).Error
+	return err
+}
+
+func OccupyLockerById(id int, uid int) error {
+	var result *Locker
+	err := db.First(&result, id).Error
+	if err != nil {
+		return err
+	}
+	result.Availability = false
+	result.Uid = uid
+	err = db.Update(&result).Error
+	return err
+}
+
+func GetFreeLockers(cid int) ([]int, error) {
+	var lockers []*Locker
+	err := db.Model(&Locker{}).
+		Select("Id").
+		Where("Cid = (?)", cid).
+		Not("Availability", false).
+		Find(&lockers).
+		Error
+	if err != nil {
+		return nil, err
+	}
+
+	var result []int
+	for i := range lockers {
+		result = append(result, lockers[i].Id)
+	}
+	return result, nil
 }
