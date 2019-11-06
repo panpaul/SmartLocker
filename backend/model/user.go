@@ -37,9 +37,9 @@ func AddUsers(u []*User) error {
 }
 
 func GetUserInfoById(id int) (*User, error) {
-	var result *User
+	var result User
 	err := db.First(&result, id).Error
-	return result, err
+	return &result, err
 }
 
 func GetUserInfoByName(username string) (*User, error) {

@@ -6,8 +6,8 @@ import (
 
 type Locker struct {
 	Id           int     `gorm:"primary_key;not null;index" json:"id"`
-	Position     int     `gorm:"not null;UNIQUE" json:"position"`
-	Availability bool    `gorm:"not null" json:"availability"`
+	Position     int     `gorm:"not null" json:"position"`
+	Availability bool    `gorm:"index" json:"availability"`
 	Uid          int     `gorm:"index" json:"uid"`
 	UserInfo     User    `gorm:"foreignkey:id;association_foreignkey:uid" json:"user"`
 	Cid          int     `gorm:"not null;index" json:"cid"`
@@ -50,35 +50,45 @@ func GetLockersByUid(id int) ([]*Locker, error) {
 }
 
 func ReleaseLockerById(id int) error {
-	var result *Locker
+	var result Locker
 	err := db.First(&result, id).Error
 	if err != nil {
 		return err
 	}
-	result.Availability = true
-	result.Uid = 0
-	err = db.Update(&result).Error
+	// ref:https://github.com/jinzhu/gorm/issues/202
+	//result.Availability = true
+	//result.Uid = 0
+	err = db.Model(&result).
+		Updates(map[string]interface{}{
+			"Availability": true,
+			"Uid":          0,
+		}).Error
 	return err
 }
 
 func OccupyLockerById(id int, uid int) error {
-	var result *Locker
+	var result Locker
 	err := db.First(&result, id).Error
 	if err != nil {
 		return err
 	}
-	result.Availability = false
-	result.Uid = uid
-	err = db.Update(&result).Error
+	// ref:https://github.com/jinzhu/gorm/issues/202
+	//result.Availability = false
+	//result.Uid = uid
+	err = db.Model(&result).
+		Updates(map[string]interface{}{
+			"Availability": false,
+			"Uid":          uid,
+		}).Error
 	return err
 }
 
 func GetFreeLockers(cid int) ([]int, error) {
 	var lockers []*Locker
 	err := db.Model(&Locker{}).
-		Select("Id").
-		Where("Cid = (?)", cid).
-		Not("Availability", false).
+		Select("id").
+		Where("cid = (?)", cid).
+		Not("availability", false).
 		Find(&lockers).
 		Error
 	if err != nil {

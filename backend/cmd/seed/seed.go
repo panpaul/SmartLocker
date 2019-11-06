@@ -4,9 +4,12 @@ import (
 	"SmartLocker/config"
 	"SmartLocker/logger"
 	"SmartLocker/model"
+	"SmartLocker/service/article"
 	"github.com/go-playground/log"
+	"math/rand"
 	"runtime"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -15,11 +18,23 @@ func main() {
 	config.Setup()
 	model.Setup()
 
+	// check if data exist
+	cl, err := model.GetCabinetLocations()
+	if err != nil {
+		log.WithError(err)
+		return
+	}
+	if len(cl) != 0 {
+		log.Info("Data exist")
+		//return
+	}
+
+	// fill cabinet
 	var c []*model.Cabinet
 	for i := 0; i < 50; i++ {
 		c = append(c, &model.Cabinet{Name: "C" + strconv.Itoa(i), Location: "L" + strconv.Itoa(int(i/4))})
 	}
-	err := model.AddCabinets(c)
+	err = model.AddCabinets(c)
 	if err != nil {
 		log.WithError(err)
 		err = nil
@@ -27,8 +42,9 @@ func main() {
 
 	runtime.GC()
 
+	// fill user
 	var u []*model.User
-	for i := 0; i < 100000; i++ {
+	for i := 0; i < 10000; i++ {
 		u = append(u, &model.User{Username: "test" + strconv.Itoa(i), Password: "test", Role: 0, Connect: ""})
 	}
 	err = model.AddUsers(u)
@@ -39,8 +55,11 @@ func main() {
 
 	runtime.GC()
 
+	// fill lockers
+
+	// get cabinets' ids
 	var cid []int
-	for i := 0; i < 14; i++ {
+	for i := 0; i < 13; i++ {
 		j, err := model.GetCabinetsByLocation("L" + strconv.Itoa(i))
 		if err != nil {
 			log.WithError(err)
@@ -51,6 +70,9 @@ func main() {
 			}
 		}
 	}
+
+	log.Info(cid)
+
 	var l []*model.Locker
 	for i := 0; i < len(cid); i++ {
 		for j := 0; j < 1000; j++ {
@@ -62,17 +84,26 @@ func main() {
 		}
 
 		log.Info(i)
-		go tx(l)
+		err := model.AddLockers(l)
+		if err != nil {
+			log.WithError(err)
+		}
 		l = nil
 		runtime.GC()
 	}
 
 	runtime.GC()
-}
 
-func tx(l []*model.Locker) {
-	err := model.AddLockers(l)
-	if err != nil {
-		log.WithError(err)
+	// Randomly make occupations
+	ri := rand.New(rand.NewSource(int64(time.Now().Nanosecond())))
+	for i := 0; i < 100; i++ { //随机找1000个人
+		art := article.Article{UserId: ri.Intn(10000)}
+		for j := 0; j < 25; j++ { //随机找25个柜子
+			art.CabinetId = cid[ri.Intn(len(cid))]
+			for k := 0; k < 10; k++ { // 每个柜子申请10格
+				art.RandomOccupy()
+			}
+		}
 	}
+
 }
