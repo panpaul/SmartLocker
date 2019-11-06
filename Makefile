@@ -27,7 +27,7 @@ pack: clean dep server
 	cp -r resources SmartLocker/
 	zip -r9 -o SmartLocker.zip ./SmartLocker
 
-run: clean dep server
+run: dep server
 	./server s
 
 dep:

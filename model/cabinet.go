@@ -46,3 +46,18 @@ func GetCabinetsByLocation(where string) ([]int, error) {
 	}
 	return r, nil
 }
+
+func GetCabinetLocations() ([]string, error) {
+	var c []*Cabinet
+	var r []string
+	err := db.Select("Location").
+		Find(&c).
+		Error
+	if err != nil {
+		return nil, err
+	}
+	for i := range c {
+		r = append(r, c[i].Location)
+	}
+	return r, nil
+}
