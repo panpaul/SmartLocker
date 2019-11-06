@@ -1,0 +1,13 @@
+WebServer:
+  Address: 0.0.0.0
+  Port: 7070
+  JwtSecret: secret
+Database:
+  Type: mysql
+  Address: 127.0.0.1
+  Port: 3306
+  User: SmartLocker
+  Password: SmartLocker
+  Database: smartlocker
+  Prefix: sl_
+Mode: debug

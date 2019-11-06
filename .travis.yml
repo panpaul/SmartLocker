@@ -4,4 +4,4 @@ services:
 env: GO111MODULE=on
 before_script: go mod tidy
 script:
-  - docker build .
+  - cd backend && docker build .
