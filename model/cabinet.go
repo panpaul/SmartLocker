@@ -35,7 +35,8 @@ func AddCabinets(c []*Cabinet) error {
 func GetCabinetsByLocation(where string) ([]int, error) {
 	var c []*Cabinet
 	var r []int
-	err := db.Where(&Cabinet{Location: where}).
+	err := db.Select("Id").
+		Where(&Cabinet{Location: where}).
 		Find(&c).
 		Error
 	if err != nil {

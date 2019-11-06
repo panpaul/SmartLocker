@@ -1,3 +1,5 @@
+*.exe
 server
+seed
 SmartLocker/*
 SmartLocker.zip
