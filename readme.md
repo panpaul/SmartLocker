@@ -2,6 +2,8 @@
 
 本项目为某智能储物柜的服务端程序
 
+[![Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker)
+
 文件目录结构说明
 
 ```
