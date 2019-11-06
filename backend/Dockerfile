@@ -1,5 +1,5 @@
 FROM alpine:latest AS builder
-COPY .. /SmartLocker/
+COPY . /SmartLocker/
 WORKDIR /SmartLocker
 ENV GO111MODULE on
 RUN apk update && apk add zip go make ca-certificates git musl-dev

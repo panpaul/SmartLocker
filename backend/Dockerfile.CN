@@ -1,5 +1,5 @@
 FROM alpine:latest AS builder
-COPY .. /SmartLocker/
+COPY . /SmartLocker/
 WORKDIR /SmartLocker
 ENV GO111MODULE on
 ENV GOPROXY https://goproxy.cn
