@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func wrap(err int, body interface{}) gin.H {
+func Wrap(err int, body interface{}) gin.H {
 	if err != e.Success {
 		return gin.H{
 			"code": err,

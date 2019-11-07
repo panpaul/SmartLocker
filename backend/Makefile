@@ -6,11 +6,11 @@ LDFLAGS += -X "main.GitHash=$(shell git rev-parse HEAD)"
 LDFLAGS += -X "main.Version=$(shell cat VERSION)"
 LDFLAGS += -X "main.BuildTimeStamp=$(shell date -u '+%Y-%m-%d %I:%M:%S')"
 
-.PHONY: all server clean pack run dep
+.PHONY: all server clean pack run dep fmt
 
 default: all
 
-all: clean dep server
+all: clean dep fmt server
 
 server:
 	$(GO) build -o server -ldflags '$(LDFLAGS)' ./cmd/server/
@@ -32,3 +32,6 @@ run: dep server
 
 dep:
 	go get -u ./...
+
+fmt:
+	go fmt ./...

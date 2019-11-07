@@ -58,7 +58,6 @@ func (a *Article) Update(release bool) int { // Param:Id(UserId)
 	var err error
 	if release {
 		err = model.ReleaseLockerById(a.Id)
-
 	} else {
 		err = model.OccupyLockerById(a.Id, a.UserId)
 	}

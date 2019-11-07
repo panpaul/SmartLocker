@@ -11,26 +11,26 @@ import (
 	"time"
 )
 
-func Register(c *gin.Context) {
+func UserRegister(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
 	if username == "" || password == "" {
-		c.JSON(http.StatusOK, wrap(e.InvalidParams, nil))
+		c.JSON(http.StatusOK, Wrap(e.InvalidParams, nil))
 		return
 	}
 
 	u := user.User{Username: username, Password: password}
 	err := u.Register()
-	c.JSON(http.StatusOK, wrap(err, nil))
+	c.JSON(http.StatusOK, Wrap(err, nil))
 }
 
-func Login(c *gin.Context) { //密码是明文
+func UserLogin(c *gin.Context) { //密码是明文
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
 	if username == "" || password == "" {
-		c.JSON(http.StatusOK, wrap(e.InvalidParams, nil))
+		c.JSON(http.StatusOK, Wrap(e.InvalidParams, nil))
 		return
 	}
 
@@ -39,11 +39,11 @@ func Login(c *gin.Context) { //密码是明文
 	t, err := u.Verify()
 
 	if err != e.Success {
-		c.JSON(http.StatusOK, wrap(err, nil))
+		c.JSON(http.StatusOK, Wrap(err, nil))
 		return
 	}
 	if t == false {
-		c.JSON(http.StatusOK, wrap(e.Unauthorized, nil))
+		c.JSON(http.StatusOK, Wrap(e.Unauthorized, nil))
 		return
 	}
 
@@ -55,21 +55,21 @@ func Login(c *gin.Context) { //密码是明文
 	token := claim.GenerateToken()
 
 	if token == "" {
-		c.JSON(http.StatusOK, wrap(e.InternalError, nil))
+		c.JSON(http.StatusOK, Wrap(e.InternalError, nil))
 		return
 	}
 
-	c.JSON(http.StatusOK, wrap(e.Success, token))
+	c.JSON(http.StatusOK, Wrap(e.Success, token))
 
 }
 
-func Check(c *gin.Context) {
+func UserCheck(c *gin.Context) {
 	token := c.PostForm("token")
 	_, err := auth.CheckToken(token)
-	c.JSON(http.StatusOK, wrap(err, nil))
+	c.JSON(http.StatusOK, Wrap(err, nil))
 }
 
-func Info(c *gin.Context) {
+func UserInfo(c *gin.Context) {
 	username := c.PostForm("username")
 	id, err := strconv.Atoi(c.PostForm("id"))
 	if err != nil {
@@ -77,11 +77,11 @@ func Info(c *gin.Context) {
 	}
 
 	if username == "" && id == 0 {
-		c.JSON(http.StatusOK, wrap(e.InvalidParams, nil))
+		c.JSON(http.StatusOK, Wrap(e.InvalidParams, nil))
 		return
 	}
 	if username != "" && id != 0 { // 两个参数二选一
-		c.JSON(http.StatusOK, wrap(e.InvalidParams, nil))
+		c.JSON(http.StatusOK, Wrap(e.InvalidParams, nil))
 		return
 	}
 
@@ -89,12 +89,12 @@ func Info(c *gin.Context) {
 	token := c.PostForm("token")
 	claim, errInt := auth.CheckToken(token)
 	if errInt != e.Success {
-		c.JSON(http.StatusOK, wrap(errInt, nil))
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
 		return
 	}
 
 	if claim.Role != model.ADMIN && !(claim.Id == id || claim.Username == username) {
-		c.JSON(http.StatusOK, wrap(e.PermissionDenied, "Only admin can access it"))
+		c.JSON(http.StatusOK, Wrap(e.PermissionDenied, "Only admin can access it"))
 		return
 	}
 
@@ -102,5 +102,5 @@ func Info(c *gin.Context) {
 	u := user.User{Username: username, Id: id}
 	errInt = u.Get()
 
-	c.JSON(http.StatusOK, wrap(errInt, u))
+	c.JSON(http.StatusOK, Wrap(errInt, u))
 }
