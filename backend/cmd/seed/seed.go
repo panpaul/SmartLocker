@@ -26,7 +26,7 @@ func main() {
 	}
 	if len(cl) != 0 {
 		log.Info("Data exist")
-		//return
+		return
 	}
 
 	// fill cabinet
@@ -96,11 +96,11 @@ func main() {
 
 	// Randomly make occupations
 	ri := rand.New(rand.NewSource(int64(time.Now().Nanosecond())))
-	for i := 0; i < 100; i++ { //随机找1000个人
+	for i := 0; i < 100; i++ { //随机找100个人
 		art := article.Article{UserId: ri.Intn(10000)}
-		for j := 0; j < 25; j++ { //随机找25个柜子
+		for j := 0; j < 5; j++ { //随机找5个柜子
 			art.CabinetId = cid[ri.Intn(len(cid))]
-			for k := 0; k < 10; k++ { // 每个柜子申请10格
+			for k := 0; k < 5; k++ { // 每个柜子申请5格
 				art.RandomOccupy()
 			}
 		}

@@ -7,7 +7,7 @@ import (
 type Locker struct {
 	Id           int     `gorm:"primary_key;not null;index" json:"id"`
 	Position     int     `gorm:"not null" json:"position"`
-	Availability bool    `gorm:"index" json:"availability"`
+	Availability bool    `gorm:"not null;index" json:"availability"`
 	Uid          int     `gorm:"index" json:"uid"`
 	UserInfo     User    `gorm:"foreignkey:id;association_foreignkey:uid" json:"user"`
 	Cid          int     `gorm:"not null;index" json:"cid"`

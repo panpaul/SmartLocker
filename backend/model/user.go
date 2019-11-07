@@ -10,6 +10,11 @@ type User struct {
 	Connect  string `gorm:"not null" json:"connect"`
 }
 
+const (
+	ADMIN = 1
+	USER  = 0
+)
+
 func AddUser(username string, password string, role int, connect string) error {
 	u := User{
 		Username: username,

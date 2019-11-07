@@ -33,33 +33,22 @@ func AddCabinets(c []*Cabinet) error {
 }
 
 func GetCabinetsByLocation(where string) ([]int, error) {
-	var c []*Cabinet
 	var r []int
-	err := db.
+	err := db.Model(&Cabinet{}).
 		Where(&Cabinet{Location: where}).
-		Select("id").
-		Find(&c).
+		Pluck("DISTINCT(id)", &r).
 		Error
 	if err != nil {
 		return nil, err
-	}
-	for i := range c {
-		r = append(r, c[i].Id)
 	}
 	return r, nil
 }
 
 func GetCabinetLocations() ([]string, error) {
-	var c []*Cabinet
 	var r []string
-	err := db.Select("location").
-		Find(&c).
-		Error
+	err := db.Model(&Cabinet{}).Pluck("DISTINCT(location)", &r).Error
 	if err != nil {
 		return nil, err
-	}
-	for i := range c {
-		r = append(r, c[i].Location)
 	}
 	return r, nil
 }

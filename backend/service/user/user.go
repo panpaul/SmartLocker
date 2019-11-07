@@ -4,6 +4,7 @@ import (
 	"SmartLocker/e"
 	"SmartLocker/model"
 	"SmartLocker/service/article"
+	"SmartLocker/util"
 	"github.com/go-playground/log"
 )
 
@@ -46,5 +47,18 @@ func (u *User) getArticles() int { // Param:Id
 		return err
 	}
 	u.Articles = a
+	return e.Success
+}
+
+// register
+func (u *User) Register() int {
+	if u.Username == "" || u.Password == "" {
+		return e.InvalidParams
+	}
+	err := model.AddUser(u.Username, util.EncodeSha256(u.Password), model.USER, "")
+	if err != nil {
+		log.WithError(err).Warn("Couldn't register")
+		return e.InternalError
+	}
 	return e.Success
 }
