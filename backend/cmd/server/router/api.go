@@ -26,8 +26,8 @@ func InitRouters() *gin.Engine {
 	r.StaticFS("/resources", http.Dir("resources"))
 
 	// handle api v1
-	apiv1 := r.Group("/api/v1")
-	initAPIv1(apiv1)
+	apiV1 := r.Group("/api/v1")
+	initAPIv1(apiV1)
 
 	// return the instance
 	return r

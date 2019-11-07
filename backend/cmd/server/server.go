@@ -5,6 +5,7 @@ import (
 	"SmartLocker/config"
 	"SmartLocker/logger"
 	"SmartLocker/model"
+	"SmartLocker/service/auth"
 	"github.com/go-playground/log"
 	"github.com/urfave/cli"
 	"net/http"
@@ -18,6 +19,7 @@ func main() {
 	logger.Setup()
 	config.Setup()
 	model.Setup()
+	auth.JwtSetup()
 
 	// create an app instance
 	app := cli.NewApp()

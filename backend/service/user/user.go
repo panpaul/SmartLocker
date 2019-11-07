@@ -62,3 +62,24 @@ func (u *User) Register() int {
 	}
 	return e.Success
 }
+
+func (u *User) Verify() (bool, int) {
+	if u.Username == "" {
+		return false, e.InvalidParams
+	}
+
+	user, err := model.GetUserInfoByName(u.Username)
+
+	if err != nil {
+		log.WithError(err).Warn("couldn't get user info")
+		return false, e.InternalError
+	}
+
+	if user.Password == util.EncodeSha256(u.Password) {
+		u.Id = user.Id
+		u.Role = user.Role
+		return true, e.Success
+	} else {
+		return false, e.Success
+	}
+}
