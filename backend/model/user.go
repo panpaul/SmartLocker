@@ -48,7 +48,7 @@ func GetUserInfoById(id int) (*User, error) {
 }
 
 func GetUserInfoByName(username string) (*User, error) {
-	var result *User
+	var result User
 	err := db.Where(&User{Username: username}).Find(&result).Error
-	return result, err
+	return &result, err
 }

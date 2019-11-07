@@ -35,6 +35,7 @@ func (u *User) Get() int { //Param:Id/Username
 	}
 
 	u.Id = user.Id
+	u.Username = user.Username
 	u.Role = user.Role
 
 	return u.getArticles()

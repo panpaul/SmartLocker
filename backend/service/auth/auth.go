@@ -21,7 +21,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func AuthToken(tokenRaw string) (*Claims, int) {
+func CheckToken(tokenRaw string) (*Claims, int) {
 	if tokenRaw == "" {
 		return nil, e.InvalidParams
 	}
