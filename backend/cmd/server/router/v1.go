@@ -19,4 +19,7 @@ func initAPIv1(apiV1 *gin.RouterGroup) {
 	article.POST("/release", v1.ReleaseArticle)
 	article.POST("/info", v1.LockerInfo)
 
+	face := apiV1.Group("/face")
+	face.POST("/recognize", v1.RecognizeFace)
+
 }

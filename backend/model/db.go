@@ -6,20 +6,25 @@ import (
 	"github.com/go-playground/log"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var db *gorm.DB
 
 func Setup() {
 	var err error
-	//TODO adapt sqlite
-	db, err = gorm.Open(config.Conf.Database.Type,
-		fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True",
-			config.Conf.Database.User,
-			config.Conf.Database.Password,
-			config.Conf.Database.Address,
-			config.Conf.Database.Port,
-			config.Conf.Database.Database))
+
+	if config.Conf.Database.Type == "sqlite" {
+		db, err = gorm.Open("sqlite3", config.Conf.Database.Database)
+	} else {
+		db, err = gorm.Open(config.Conf.Database.Type,
+			fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True",
+				config.Conf.Database.User,
+				config.Conf.Database.Password,
+				config.Conf.Database.Address,
+				config.Conf.Database.Port,
+				config.Conf.Database.Database))
+	}
 
 	if err != nil {
 		log.WithError(err).Fatal("Couldn't connect to the database")

@@ -13,6 +13,8 @@ var MsgFlags = map[int]string{
 	RegistrationFailed: "注册失败",
 	RegisterDuplicated: "该用户名已被注册",
 	NoMoreLocker:       "该储物柜已满",
+	UploadFailed:       "上传失败",
+	FileTypeMismatch:   "文件类型不符",
 }
 
 func GetMsg(code int) string {

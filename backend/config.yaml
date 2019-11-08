@@ -3,11 +3,11 @@ WebServer:
   Port: 7070
   JwtSecret: secret
 Database:
-  Type: mysql
-  Address: 127.0.0.1
-  Port: 3306
-  User: SmartLocker
-  Password: SmartLocker
-  Database: smartlocker
+  Type: sqlite
+  Address:
+  Port:
+  User:
+  Password:
+  Database: SmartLocker.db
   Prefix: sl_
 Mode: debug
