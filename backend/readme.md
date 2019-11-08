@@ -20,13 +20,19 @@
 │       ├── router 路由
 │       │   ├── api.go
 │       │   ├── v1
-│       │   │   └── wrapper.go
+│       │   │   ├── artical.go
+│       │   │   ├── face.go
+│       │   │   ├── middleware
+│       │   │   │   └── seed.go
+│       │   │   ├── user.go
+|       |   |   ├── wrapper.go
 │       │   └── v1.go
 │       └── server.go
 ├── config 一个简单的yaml配置读取器
 │   ├── config.go
 │   └── scheme.go
 ├── config.yaml 配置文件
+├── config_mysql.yaml
 ├── docker-startup.sh 用于容器启动时的startup脚本
 ├── e 处理错误的包
 │   ├── code.go
@@ -50,6 +56,7 @@
 │   └── user 用户相关
 │       └── user.go
 └── util 辅助工具包
-    └── hash.go
+    ├── face.go
+	└── hash.go
 ```
 
