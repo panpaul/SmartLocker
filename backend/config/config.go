@@ -1,10 +1,10 @@
 package config
 
 import (
-	"io/ioutil"
-	"os"
 	"github.com/go-playground/log"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"os"
 )
 
 var Conf *Config

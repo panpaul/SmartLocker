@@ -2,61 +2,65 @@
 
 本项目为某智能储物柜的服务端程序
 
-[![Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker)
+master build status [![Master Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker)
+
+dev build status [![Dev Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=dev)](https://travis-ci.org/panpaul/SmartLocker)
 
 文件目录结构说明
 
 ```
 .
-├── Dockerfile 用于部署的Dockerfile
-├── Dockerfile.CN 修改了镜像的Dockerfile
-├── LICENSE
-├── Makefile
-├── VERSION
-├── cmd 本目录存放了最终生成的应用
-│   ├── seed [TODO]测试数据生成器
+├── Dockerfile docker构建文件
+├── Dockerfile.CN 修改了镜像源的docker构建文件
+├── Makefile 构建脚本
+├── VERSION 项目版本
+├── cmd 可执行文件
+│   ├── seed 随机数据生成器
 │   │   └── seed.go
-│   └── server 服务器本体
+│   └── server 服务端
 │       ├── router 路由
 │       │   ├── api.go
-│       │   ├── v1
-│       │   │   ├── artical.go
+│       │   ├── v1 第1版
+│       │   │   ├── article.go
 │       │   │   ├── face.go
-│       │   │   ├── middleware
-│       │   │   │   └── seed.go
+│       │   │   ├── middleware 认证
+│       │   │   │   └── jwt.go
 │       │   │   ├── user.go
-|       |   |   ├── wrapper.go
+│       │   │   └── wrapper.go
 │       │   └── v1.go
 │       └── server.go
-├── config 一个简单的yaml配置读取器
+├── config 配置文件处理包
 │   ├── config.go
 │   └── scheme.go
-├── config.yaml 配置文件
-├── config_mysql.yaml
-├── docker-startup.sh 用于容器启动时的startup脚本
-├── e 处理错误的包
+├── config.yaml 使用sqlite的设置文件
+├── config_mysql.yaml 使用mysql的设置文件
+├── docker-startup.sh docker容器内的启动脚本
+├── e 错误处理包
 │   ├── code.go
 │   └── msg.go
-├── go.mod
-├── go.sum
-├── logger 记录日志的包
+├── go.mod 项目依赖记录
+├── go.sum 项目依赖记录
+├── logger 日志记录包
 │   └── logger.go
-├── model 数据库模型
+├── model 数据库交互模型
 │   ├── cabinet.go
 │   ├── db.go
 │   ├── locker.go
 │   └── user.go
-├── readme.md
-├── resources
-├── service 本项目涉及的几个service
-│   ├── article article即物品，处理储物相关细节
+├── readme.md 本文档
+├── resources [预留]
+├── service
+│   ├── article 储物格信息
 │   │   └── article.go
-│   ├── cabinet 储物柜相关
+│   ├── auth 认证
+│   │   └── auth.go
+│   ├── cabinet 储物柜信息
 │   │   └── cabinet.go
-│   └── user 用户相关
+│   └── user 用户信息
 │       └── user.go
 └── util 辅助工具包
-    ├── face.go
-	└── hash.go
+    ├── hash.go
+    └── img.go
+
 ```
 

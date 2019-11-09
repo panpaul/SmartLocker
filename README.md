@@ -4,7 +4,7 @@
 
 |   目录   |   说明   |   状态   |
 | :------: | :------: | :------: |
-| backend  |  服务端  | [![Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker) |
+| backend  |  服务端  | master[![Master Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker) dev[![Dev Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=dev)](https://travis-ci.org/panpaul/SmartLocker) |
 | frontend |   前端   |   TODO   |
 |   face   | 人脸识别 |   TODO   |
 

@@ -2,6 +2,7 @@
 
 r=$(cat /dev/urandom | head -n 20 | md5sum | head -c 20)
 rm config.yaml
+
 # shellcheck disable=SC2129
 echo "WebServer:" >> config.yaml
 echo "  Address: $WEB_ADDRESS" >> config.yaml
