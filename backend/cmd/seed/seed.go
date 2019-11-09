@@ -15,7 +15,7 @@ import (
 func main() {
 	// init the helpers
 	logger.Setup()
-	config.Setup()
+	config.Setup("config.yaml")
 	model.Setup()
 
 	// check if data exist
