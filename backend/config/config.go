@@ -1,16 +1,16 @@
 package config
 
 import (
-	"github.com/go-playground/log"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+	"github.com/go-playground/log"
+	"gopkg.in/yaml.v2"
 )
 
 var Conf *Config
 
-func Setup() {
-	data, err := read("./config.yaml")
+func Setup(con string) {
+	data, err := read("./" + con)
 	if err != nil {
 		log.WithError(err).
 			Fatal("Couldn't read configures")
