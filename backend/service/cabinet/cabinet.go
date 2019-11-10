@@ -6,12 +6,6 @@ import (
 	"github.com/go-playground/log"
 )
 
-type Cabinet struct {
-	Id       int
-	Name     string
-	Location string
-}
-
 func GetLocations() ([]string, int) {
 	l, err := model.GetCabinetLocations()
 	if err != nil {
@@ -21,16 +15,12 @@ func GetLocations() ([]string, int) {
 	return l, e.Success
 }
 
-func GetCabinets(where string) ([]Cabinet, int) {
-	index, err := model.GetCabinetsByLocation(where)
+func GetCabinets(where string) ([]*model.Cabinet, int) {
+	c, err := model.GetCabinetsByLocation(where)
 	if err != nil {
 		log.WithError(err).Warn("Couldn't get cabinets")
 		return nil, e.InternalError
 	}
 
-	var r []Cabinet
-	for i := range index {
-		r = append(r, Cabinet{Id: index[i]})
-	}
-	return r, e.Success
+	return c, e.Success
 }

@@ -60,7 +60,7 @@ func main() {
 	// get cabinets' ids
 	var cid []int
 	for i := 0; i < 13; i++ {
-		j, err := model.GetCabinetsByLocation("L" + strconv.Itoa(i))
+		j, err := model.GetCabinetIdsByLocation("L" + strconv.Itoa(i))
 		if err != nil {
 			log.WithError(err)
 			err = nil

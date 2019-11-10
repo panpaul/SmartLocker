@@ -32,7 +32,7 @@ func AddCabinets(c []*Cabinet) error {
 	return tx.Commit().Error
 }
 
-func GetCabinetsByLocation(where string) ([]int, error) {
+func GetCabinetIdsByLocation(where string) ([]int, error) {
 	var r []int
 	err := db.Model(&Cabinet{}).
 		Where(&Cabinet{Location: where}).
@@ -51,4 +51,12 @@ func GetCabinetLocations() ([]string, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+func GetCabinetsByLocation(where string) ([]*Cabinet, error) {
+	var c []*Cabinet
+	err := db.Where(&Cabinet{Location: where}).
+		Find(&c).
+		Error
+	return c, err
 }
