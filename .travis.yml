@@ -1,11 +1,4 @@
 dist: bionic
-services:
-  - docker
-env: GO111MODULE=on
-before_script: go mod tidy
-script:
-  - cd backend && docker build .
-  
 jobs:
   include:
     - language: go
@@ -19,13 +12,13 @@ jobs:
       compiler:
       - clang
       before_install:
-      - apt update && apt upgrade -y
-      - apt install -y libopencv-dev
+      - sudo apt update
+      - sudo apt install -y libopencv-dev
       install:
       - echo $LANG
       - echo $LC_ALL
-      - ./face/dependencies.sh
+      - chmod +x ./face/ci_dependencies.sh && ./face/ci_dependencies.sh
       script:
       - cd ./face/FaceRecognizer && mkdir build && cd build
-      - cmake ..
+      - cmake .. -DSeetaFace_DIR=/home/travis/build/panpaul/SmartLocker/face/SeetaFace2/build/install/lib/cmake
       - make

@@ -10,6 +10,12 @@ if(NOT MSVC)
     target_link_libraries(FaceRecognizer stdc++fs)
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8.3.0")
+    add_definitions("-DEXPFS")
+  endif()
+endif()
+
 find_package(SeetaFace REQUIRED)
 if (SeetaFace_FOUND)
     include_directories(${SeetaFace_INCLUDE_DIR})

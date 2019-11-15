@@ -8,11 +8,18 @@
 #include <map>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <vector>
 
 using namespace std;
-using namespace filesystem;
+
+#ifdef EXPFS
+	#include <experimental/filesystem>
+	using namespace experimental::filesystem;
+#else
+	#include <filesystem>
+	using namespace filesystem;
+#endif
+
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
