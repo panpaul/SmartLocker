@@ -2,10 +2,6 @@
 
 本项目为某智能储物柜的服务端程序
 
-master build status [![Master Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=master)](https://travis-ci.org/panpaul/SmartLocker)
-
-dev build status [![Dev Build Status](https://travis-ci.org/panpaul/SmartLocker.svg?branch=dev)](https://travis-ci.org/panpaul/SmartLocker)
-
 文件目录结构说明
 
 ```
@@ -32,7 +28,7 @@ dev build status [![Dev Build Status](https://travis-ci.org/panpaul/SmartLocker.
 ├── config 配置文件处理包
 │   ├── config.go
 │   └── scheme.go
-├── config.yaml 使用sqlite的设置文件
+├── config_sqlite.yaml 使用sqlite的设置文件
 ├── config_mysql.yaml 使用mysql的设置文件
 ├── docker-startup.sh docker容器内的启动脚本
 ├── e 错误处理包
@@ -56,8 +52,11 @@ dev build status [![Dev Build Status](https://travis-ci.org/panpaul/SmartLocker.
 │   │   └── auth.go
 │   ├── cabinet 储物柜信息
 │   │   └── cabinet.go
-│   └── user 用户信息
-│       └── user.go
+│   ├── user 用户信息
+│   │   └── user.go
+|   └── cache 缓存
+|       ├── redis.go
+│       └── cabinet.go
 └── util 辅助工具包
     ├── hash.go
     └── img.go
