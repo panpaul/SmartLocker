@@ -11,8 +11,6 @@
 ├── Makefile 构建脚本
 ├── VERSION 项目版本
 ├── cmd 可执行文件
-│   ├── seed 随机数据生成器
-│   │   └── seed.go
 │   └── server 服务端
 │       ├── router 路由
 │       │   ├── api.go
