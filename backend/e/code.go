@@ -25,6 +25,7 @@ const (
 	JWTNotAToken       = 401
 	JWTInvalid         = 402
 	FileTypeMismatch   = 403
+	UsernameInvalid    = 404
 	JWTOutOfTime       = 500
 	RegisterDuplicated = 600
 )

@@ -4,8 +4,11 @@ import (
 	"SmartLocker/e"
 	"SmartLocker/model"
 	"SmartLocker/service/article"
+	"SmartLocker/service/cache"
 	"github.com/go-playground/log"
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
+	"unicode"
 )
 
 type User struct {
@@ -19,6 +22,25 @@ type User struct {
 // fill the blank
 func (u *User) Get() int { //Param:Id/Username
 	var user *model.User
+	var errInt int
+
+	if u.Id != 0 {
+		user, errInt = cache.GetUserInfo(strconv.Itoa(u.Id))
+	} else if u.Username != "" {
+		user, errInt = cache.GetUserInfo(u.Username)
+	} else {
+		return e.InvalidParams
+	}
+
+	if errInt == e.Success {
+		u.Id = user.Id
+		u.Username = user.Username
+		u.Password = user.Password
+		u.Role = user.Role
+
+		return e.Success
+	}
+
 	var err error
 
 	if u.Id != 0 {
@@ -36,13 +58,19 @@ func (u *User) Get() int { //Param:Id/Username
 
 	u.Id = user.Id
 	u.Username = user.Username
+	u.Password = user.Password
 	u.Role = user.Role
 
-	return u.getArticles()
+	if errInt == e.CacheNotFound {
+		cache.SetUserInfo(strconv.Itoa(user.Id), user)
+		cache.SetUserInfo(user.Username, user)
+	}
+
+	return e.Success
 }
 
 // get the user's articles
-func (u *User) getArticles() int { // Param:Id
+func (u *User) GetArticles() int { // Param:Id
 	a, err := article.GetArticles(u.Id)
 	if err != e.Success {
 		return err
@@ -55,6 +83,9 @@ func (u *User) getArticles() int { // Param:Id
 func (u *User) Register() int {
 	if u.Username == "" || string(u.Password) == "" {
 		return e.InvalidParams
+	}
+	if unicode.IsDigit(rune(u.Username[0])) {
+		return e.UsernameInvalid
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
@@ -71,19 +102,12 @@ func (u *User) Register() int {
 	return e.Success
 }
 
+// Verify password
 func (u *User) Verify() (bool, int) {
-	if u.Username == "" {
-		return false, e.InvalidParams
-	}
+	user := User{Username: u.Username}
+	user.Get()
 
-	user, err := model.GetUserInfoByName(u.Username)
-
-	if err != nil {
-		log.WithError(err).Warn("couldn't get user info")
-		return false, e.InternalError
-	}
-
-	err = bcrypt.CompareHashAndPassword(user.Password, u.Password)
+	err := bcrypt.CompareHashAndPassword(user.Password, u.Password)
 
 	if err == nil {
 		u.Id = user.Id
