@@ -5,7 +5,7 @@ import "github.com/go-playground/log"
 type User struct {
 	Id       int    `gorm:"primary_key;AUTO_INCREMENT;index;not_null" json:"id"`
 	Username string `gorm:"not null;index;UNIQUE" json:"username"`
-	Password string `gorm:"not null" json:"password"`
+	Password []byte `gorm:"not null" json:"password"`
 	Role     int    `gorm:"not null" json:"role"`
 	Connect  string `gorm:"not null" json:"connect"`
 }
@@ -15,7 +15,7 @@ const (
 	USER  = 0
 )
 
-func AddUser(username string, password string, role int, connect string) error {
+func AddUser(username string, password []byte, role int, connect string) error {
 	u := User{
 		Username: username,
 		Password: password,

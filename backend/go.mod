@@ -20,6 +20,7 @@ require (
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/ugorji/go v1.1.7 // indirect
 	github.com/urfave/cli v1.22.1
+	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/yaml.v2 v2.2.5

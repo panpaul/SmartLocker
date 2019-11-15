@@ -4,14 +4,14 @@ import (
 	"SmartLocker/e"
 	"SmartLocker/model"
 	"SmartLocker/service/article"
-	"SmartLocker/util"
 	"github.com/go-playground/log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
 	Id       int
 	Username string
-	Password string
+	Password []byte
 	Role     int
 	Articles []article.Article
 }
@@ -53,10 +53,17 @@ func (u *User) getArticles() int { // Param:Id
 
 // register
 func (u *User) Register() int {
-	if u.Username == "" || u.Password == "" {
+	if u.Username == "" || string(u.Password) == "" {
 		return e.InvalidParams
 	}
-	err := model.AddUser(u.Username, util.EncodeSha256(u.Password), model.USER, "")
+
+	hashedPassword, err := bcrypt.GenerateFromPassword(u.Password, bcrypt.DefaultCost)
+	if err != nil {
+		log.WithError(err).Warn("couldn't generate password")
+		return e.InternalError
+	}
+
+	err = model.AddUser(u.Username, hashedPassword, model.USER, "")
 	if err != nil {
 		log.WithError(err).Warn("Couldn't register")
 		return e.InternalError
@@ -76,11 +83,14 @@ func (u *User) Verify() (bool, int) {
 		return false, e.InternalError
 	}
 
-	if user.Password == util.EncodeSha256(u.Password) {
+	err = bcrypt.CompareHashAndPassword(user.Password, u.Password)
+
+	if err == nil {
 		u.Id = user.Id
 		u.Role = user.Role
 		return true, e.Success
 	} else {
 		return false, e.Success
 	}
+
 }

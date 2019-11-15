@@ -20,7 +20,7 @@ func UserRegister(c *gin.Context) {
 		return
 	}
 
-	u := user.User{Username: username, Password: password}
+	u := user.User{Username: username, Password: []byte(password)}
 	err := u.Register()
 	c.JSON(http.StatusOK, Wrap(err, nil))
 }
@@ -35,7 +35,7 @@ func UserLogin(c *gin.Context) { //密码是明文
 	}
 
 	//验证用户密码
-	u := user.User{Username: username, Password: password}
+	u := user.User{Username: username, Password: []byte(password)}
 	t, err := u.Verify()
 
 	if err != e.Success {
