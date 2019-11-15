@@ -10,4 +10,7 @@ Database:
   Password: SmartLocker
   Database: smartlocker
   Prefix: sl_
+Redis:
+  Host: 192.168.99.101:6379
+  Password:
 Mode: debug

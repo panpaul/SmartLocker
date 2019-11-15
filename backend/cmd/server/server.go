@@ -6,6 +6,7 @@ import (
 	"SmartLocker/logger"
 	"SmartLocker/model"
 	"SmartLocker/service/auth"
+	"SmartLocker/service/cache"
 	"github.com/go-playground/log"
 	"github.com/urfave/cli"
 	"net/http"
@@ -41,6 +42,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				config.Setup(configName)
 				model.Setup()
+				cache.Setup()
 				auth.JwtSetup()
 				StartServer(c)
 				return nil

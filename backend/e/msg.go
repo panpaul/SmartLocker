@@ -15,6 +15,9 @@ var MsgFlags = map[int]string{
 	NoMoreLocker:       "该储物柜已满",
 	UploadFailed:       "上传失败",
 	FileTypeMismatch:   "文件类型不符",
+	RedisError:         "缓存错误",
+	JsonUnmarshalError: "Json解析错误",
+	CacheNotFound:      "缓存不存在",
 }
 
 func GetMsg(code int) string {

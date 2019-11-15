@@ -1,8 +1,7 @@
 dist: bionic
 jobs:
   include:
-    - language: go
-      services:
+    - services:
       - docker
       script:
       - cd backend && docker build .
