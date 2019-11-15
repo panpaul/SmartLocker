@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"unicode"
 )
 
 func UserRegister(c *gin.Context) {
@@ -20,7 +21,12 @@ func UserRegister(c *gin.Context) {
 		return
 	}
 
-	u := user.User{Username: username, Password: password}
+	if unicode.IsDigit(rune(username[0])) {
+		c.JSON(http.StatusOK, Wrap(e.UsernameInvalid, nil))
+		return
+	}
+
+	u := user.User{Username: username, Password: []byte(password)}
 	err := u.Register()
 	c.JSON(http.StatusOK, Wrap(err, nil))
 }
@@ -34,8 +40,13 @@ func UserLogin(c *gin.Context) { //密码是明文
 		return
 	}
 
+	if unicode.IsDigit(rune(username[0])) {
+		c.JSON(http.StatusOK, Wrap(e.UsernameInvalid, nil))
+		return
+	}
+
 	//验证用户密码
-	u := user.User{Username: username, Password: password}
+	u := user.User{Username: username, Password: []byte(password)}
 	t, err := u.Verify()
 
 	if err != e.Success {
@@ -101,6 +112,12 @@ func UserInfo(c *gin.Context) {
 	// 获取用户信息
 	u := user.User{Username: username, Id: id}
 	errInt = u.Get()
+	if errInt != e.Success {
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
+		return
+	}
 
+	errInt = u.GetArticles()
+	u.Password = nil
 	c.JSON(http.StatusOK, Wrap(errInt, u))
 }

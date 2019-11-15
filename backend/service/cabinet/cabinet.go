@@ -3,34 +3,47 @@ package cabinet
 import (
 	"SmartLocker/e"
 	"SmartLocker/model"
+	"SmartLocker/service/cache"
 	"github.com/go-playground/log"
 )
 
-type Cabinet struct {
-	Id       int
-	Name     string
-	Location string
-}
-
 func GetLocations() ([]string, int) {
+	l, errInt := cache.GetCabinetLocations()
+	if errInt == e.Success {
+		//log.Info("using cache")
+		return l, e.Success
+	}
+
 	l, err := model.GetCabinetLocations()
 	if err != nil {
 		log.WithError(err).Warn("Couldn't get locations")
 		return nil, e.InternalError
 	}
+
+	if errInt == e.CacheNotFound {
+		//log.Info("write cache")
+		cache.SetCabinetLocations(l)
+	}
 	return l, e.Success
 }
 
-func GetCabinets(where string) ([]Cabinet, int) {
-	index, err := model.GetCabinetsByLocation(where)
+func GetCabinets(where string) ([]*model.Cabinet, int) {
+	c, errInt := cache.GetCabinetsByLocation(where)
+	if errInt == e.Success {
+		//log.Info("using cache")
+		return c, e.Success
+	}
+
+	c, err := model.GetCabinetsByLocation(where)
 	if err != nil {
 		log.WithError(err).Warn("Couldn't get cabinets")
 		return nil, e.InternalError
 	}
 
-	var r []Cabinet
-	for i := range index {
-		r = append(r, Cabinet{Id: index[i]})
+	if errInt == e.CacheNotFound && len(c) != 0 {
+		//log.Info("write cache")
+		cache.SetCabinets(c, where)
 	}
-	return r, e.Success
+
+	return c, e.Success
 }

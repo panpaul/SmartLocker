@@ -15,5 +15,9 @@ type Config struct {
 		Database string `yaml:"Database"`
 		Prefix   string `yaml:"Prefix"`
 	} `yaml:"Database,flow"`
+	Redis struct {
+		Host     string `yaml:"Host"`
+		Password string `yaml:"Password"`
+	} `yaml:"Redis,flow"`
 	Mode string `yaml:"Mode"`
 }

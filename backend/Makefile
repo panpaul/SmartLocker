@@ -23,7 +23,7 @@ clean:
 pack: clean dep server
 	mkdir SmartLocker
 	mv server SmartLocker
-	cp config.yaml SmartLocker/config.yaml
+	cp config_sqlite.yaml SmartLocker/config.yaml
 	cp -r resources SmartLocker/
 	zip -r9 -o SmartLocker.zip ./SmartLocker
 
@@ -31,7 +31,7 @@ run: dep server
 	./server s
 
 dep:
-	go get -u ./...
+	go get ./...
 
 fmt:
 	go fmt ./...

@@ -22,4 +22,8 @@ func initAPIv1(apiV1 *gin.RouterGroup) {
 	face := apiV1.Group("/face")
 	face.POST("/recognize", v1.RecognizeFace)
 
+	cabinet := apiV1.Group("/cabinet")
+	cabinet.GET("/location", v1.GetCabinetLocations)
+	cabinet.POST("/cabinet", v1.GetCabinetsByLocation)
+
 }

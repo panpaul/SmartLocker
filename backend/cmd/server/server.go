@@ -6,6 +6,7 @@ import (
 	"SmartLocker/logger"
 	"SmartLocker/model"
 	"SmartLocker/service/auth"
+	"SmartLocker/service/cache"
 	"github.com/go-playground/log"
 	"github.com/urfave/cli"
 	"net/http"
@@ -17,7 +18,9 @@ import (
 func main() {
 	// init the helpers
 	logger.Setup()
-	var daba string
+
+	var configName string
+
 	// create an app instance
 	app := cli.NewApp()
 	app.Name = "SmartLocker"
@@ -28,35 +31,24 @@ func main() {
 			Name:    "server",
 			Aliases: []string{"s"},
 			Usage:   "Start the Server",
-			Flags  : []cli.Flag{
+			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name		: "database, d",
-					Usage		: "Input the database",
-					Value		: "sqlite",
-					Destination	: &daba,
+					Name:        "config",
+					Usage:       "the position of the config",
+					Value:       "config.yaml",
+					Destination: &configName,
 				},
 			},
-			Action:  func (c *cli.Context) error {
-				b := false
-				if (daba == "sqlite" || daba == "SQLite") || daba == "Sqlite" {
-					config.Setup("config.yaml")
-					b = true
-				}
-				if (daba == "mysql" || daba == "Mysql") || daba == "MySQL" {
-					config.Setup("config_mysql.yaml")
-					b = true
-				}
-				if b == false {
-					log.Fatal("Unknown database, please input \"-d SQLite\" or \"-d MySQL\"")
-				}
-				
+			Action: func(c *cli.Context) error {
+				config.Setup(configName)
 				model.Setup()
+				cache.Setup()
 				auth.JwtSetup()
 				StartServer(c)
 				return nil
 			},
 		},
-		}
+	}
 
 	err := app.Run(os.Args)
 
