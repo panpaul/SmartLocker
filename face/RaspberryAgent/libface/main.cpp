@@ -1,5 +1,6 @@
 #include "include/face.h"
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
