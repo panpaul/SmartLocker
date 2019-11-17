@@ -8,10 +8,11 @@ git pull --all
 mkdir build
 cd build || exit
 cmake .. -DCMAKE_INSTALL_PREFIX=./install
-make && sudo make install
+make -j4 && sudo make install
 
 echo "===Finished==="
 
+cd ../../../
 
 echo "===ncnn==="
 
@@ -20,6 +21,6 @@ cd ./face/ncnn || exit
 mkdir build
 cd build || exit
 cmake .. -DCMAKE_INSTALL_PREFIX=./install
-make && sudo make install
+make -j4 && sudo make install
 
 echo "===Finished==="

@@ -24,7 +24,7 @@ jobs:
         - make
         - echo "=====Finished====="
         - echo "=====Building libface====="
-        - cd ./face/RaspberryAgent/libface && mkdir build && cd build
+        - cd ../../RaspberryAgent/libface && mkdir build && cd build
         - cmake .. -Dncnn_DIR=/home/travis/build/panpaul/SmartLocker/face/ncnn/build/install/lib/cmake/ncnn
         - make
         - echo "=====Finished====="
