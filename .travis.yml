@@ -2,22 +2,29 @@ dist: bionic
 jobs:
   include:
     - services:
-      - docker
+        - docker
       script:
-      - cd backend && docker build .
+        - cd backend && docker build .
 
     - language: cpp
       sudo: required
       compiler:
-      - clang
+        - clang
       before_install:
-      - sudo apt update
-      - sudo apt install -y libopencv-dev
+        - sudo apt update
+        - sudo apt install -y libopencv-dev
       install:
-      - echo $LANG
-      - echo $LC_ALL
-      - chmod +x ./face/ci_dependencies.sh && ./face/ci_dependencies.sh
+        - echo $LANG
+        - echo $LC_ALL
+        - chmod +x ./face/ci_dependencies.sh && ./face/ci_dependencies.sh
       script:
-      - cd ./face/FaceRecognizer && mkdir build && cd build
-      - cmake .. -DSeetaFace_DIR=/home/travis/build/panpaul/SmartLocker/face/SeetaFace2/build/install/lib/cmake
-      - make
+        - echo "=====Building FaceRecognizer====="
+        - cd ./face/FaceRecognizer && mkdir build && cd build
+        - cmake .. -DSeetaFace_DIR=/home/travis/build/panpaul/SmartLocker/face/SeetaFace2/build/install/lib/cmake
+        - make
+        - echo "=====Finished====="
+        - echo "=====Building libface====="
+        - cd ./face/RaspberryAgent/libface && mkdir build && cd build
+        - cmake .. -Dncnn_DIR=/home/travis/build/panpaul/SmartLocker/face/ncnn/build/install/lib/cmake/ncnn
+        - make
+        - echo "=====Finished====="
