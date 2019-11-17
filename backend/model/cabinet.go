@@ -17,6 +17,12 @@ func AddCabinet(name string, location string) error {
 	return err
 }
 
+func GetCabinetByName(name string) (*Cabinet, error) {
+	var c *Cabinet
+	err := db.Where("name = (?)").First(&c).Error
+	return c, err
+}
+
 func AddCabinets(c []*Cabinet) error {
 	tx := db.Begin()
 	if tx.Error != nil {

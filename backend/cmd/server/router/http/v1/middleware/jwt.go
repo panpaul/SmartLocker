@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	v1 "SmartLocker/cmd/server/router/v1"
+	"SmartLocker/cmd/server/router/http/v1"
 	"SmartLocker/e"
 	"SmartLocker/service/auth"
 	"github.com/gin-gonic/gin"

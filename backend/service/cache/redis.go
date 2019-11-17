@@ -47,9 +47,11 @@ func set(key string, data interface{}, time int) error {
 		return err
 	}
 
-	_, err = conn.Do("EXPIRE", key, time)
-	if err != nil {
-		return err
+	if time != 0 {
+		_, err = conn.Do("EXPIRE", key, time)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -81,15 +83,15 @@ func get(key string) ([]byte, error) {
 	return reply, nil
 }
 
-// Delete delete a kye
-func delete(key string) (bool, error) {
+// Delete deleteKey a kye
+func deleteKey(key string) (bool, error) {
 	conn := RedisConn.Get()
 	defer conn.Close()
 
 	return redis.Bool(conn.Do("DEL", key))
 }
 
-// LikeDeletes batch delete
+// LikeDeletes batch deleteKey
 func likeDeletes(key string) error {
 	conn := RedisConn.Get()
 	defer conn.Close()
@@ -100,7 +102,7 @@ func likeDeletes(key string) error {
 	}
 
 	for _, key := range keys {
-		_, err = delete(key)
+		_, err = deleteKey(key)
 		if err != nil {
 			return err
 		}
