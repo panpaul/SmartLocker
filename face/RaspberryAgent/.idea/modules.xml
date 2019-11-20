@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/libface.iml" filepath="$PROJECT_DIR$/.idea/libface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/RaspberryAgent.iml" filepath="$PROJECT_DIR$/.idea/RaspberryAgent.iml" />
     </modules>
   </component>
 </project>
