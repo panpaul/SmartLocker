@@ -23,8 +23,3 @@ jobs:
         - cmake .. -DSeetaFace_DIR=/home/travis/build/panpaul/SmartLocker/face/SeetaFace2/build/install/lib/cmake
         - make
         - echo "=====Finished====="
-        - echo "=====Building libface====="
-        - cd ../../RaspberryAgent/libface && mkdir build && cd build
-        - cmake .. -Dncnn_DIR=/home/travis/build/panpaul/SmartLocker/face/ncnn/build/install/lib/cmake/ncnn
-        - make
-        - echo "=====Finished====="
