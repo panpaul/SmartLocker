@@ -19,7 +19,7 @@ func RegisterNode(cid string, name string) bool {
 }
 
 func GenerateToken(name string, token string) bool {
-	key := "OneTimeToken_" + name
+	key := "RegToken_" + name
 	if exists(key) {
 		_, _ = deleteKey(key)
 	}
@@ -32,7 +32,7 @@ func GenerateToken(name string, token string) bool {
 }
 
 func CheckToken(name string, token string) bool {
-	key := "OneTimeToken_" + name
+	key := "RegToken_" + name
 	if !exists(key) {
 		return false
 	}

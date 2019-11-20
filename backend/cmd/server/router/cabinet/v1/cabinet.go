@@ -33,7 +33,7 @@ func PingPong(c *gin.Context) {
 func Register(c *gin.Context) {
 	name := c.PostForm("name")
 	location := c.PostForm("location")
-	token := c.PostForm("token")
+	token := c.PostForm("regToken")
 	if name == "" || token == "" || location == "" {
 		c.JSON(http.StatusOK, v1.Wrap(e.InvalidParams, nil))
 		return
@@ -58,7 +58,7 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, v1.Wrap(e.Success, cid))
 }
 
-func GenerateToken(c *gin.Context) {
+func GenerateRegToken(c *gin.Context) {
 	name := c.PostForm("name")
 	if name == "" {
 		c.JSON(http.StatusOK, v1.Wrap(e.InvalidParams, nil))
@@ -83,6 +83,6 @@ func GenerateToken(c *gin.Context) {
 		c.JSON(http.StatusOK, v1.Wrap(e.RedisError, nil))
 		return
 	}
-	c.JSON(http.StatusOK, v1.Wrap(e.Success, token))
+	c.JSON(http.StatusOK, v1.Wrap(e.Success, randToken))
 	return
 }

@@ -36,7 +36,7 @@ func initHttpAPIv1(apiV1 *gin.RouterGroup) {
 }
 
 func initCabinetAPIv1(apiV1 *gin.RouterGroup) {
-	apiV1.GET("/ping", CabinetV1.PingPong)
-	apiV1.GET("/register", CabinetV1.Register)
-	apiV1.GET("/generateToken", CabinetV1.GenerateToken)
+	apiV1.POST("/ping", CabinetV1.PingPong)
+	apiV1.POST("/register", CabinetV1.Register)
+	apiV1.POST("/generateToken", CabinetV1.GenerateRegToken)
 }

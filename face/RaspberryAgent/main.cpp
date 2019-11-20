@@ -1,9 +1,8 @@
+#include "header.h"
+#include "config.h"
+#include "connect.h"
 #include <opencv2/opencv.hpp>
 #include "UltraFace.h"
-#include <ctime>
-#include <cstdlib>
-#include <iostream>
-#include <random>
 
 using namespace std;
 
@@ -18,7 +17,17 @@ cv::VideoCapture cap(0);
 string getFace();
 
 int main(int argc, char **argv) {
-
+    // getConfig
+    initConfig();
+    // register
+    int cid = regist();
+    if (cid == -1) {
+        fprintf(stderr, "registration failed\n");
+        return -1;
+    }
+    config.cid = cid;
+    // write back config
+    writeConfig();
 
     while (true) {// main loop
         // getFace
@@ -31,6 +40,7 @@ int main(int argc, char **argv) {
         break;
     }
 
+    closeCurl();
     return 0;
 }
 

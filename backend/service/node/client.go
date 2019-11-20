@@ -11,13 +11,14 @@ func RegisterCabinet(name string, location string, lockerNum int) (int, bool) {
 	err := model.AddCabinet(name, location)
 	if err != nil {
 		log.WithError(err).Info("couldn't add cabinet")
-		return -1, false
+		// already existed?
+		//return -1, false
 	}
 
 	c, err := model.GetCabinetByName(name)
 	if err != nil {
 		log.WithError(err).Info("couldn't get cabinet")
-		return -1, false
+		return -2, false
 	}
 
 	cid := strconv.Itoa(c.Id)
