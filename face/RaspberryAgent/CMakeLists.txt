@@ -13,10 +13,10 @@ find_package(OpenCV REQUIRED)
 target_include_directories(RaspberryAgent PRIVATE ${OpenCV_INCLUDE_DIR})
 target_link_libraries(RaspberryAgent ${OpenCV_LIBS})
 
-find_package(CURL CONFIG REQUIRED)
+find_package(CURL REQUIRED)
 target_include_directories(RaspberryAgent PRIVATE ${CURL_INCLUDE_DIR})
 target_link_libraries(RaspberryAgent CURL::libcurl)
 
-find_package(nlohmann_json CONFIG REQUIRED)
+find_package(nlohmann_json REQUIRED)
 target_include_directories(RaspberryAgent PRIVATE ${nlohmann_json_INCLUDE_DIR})
 target_link_libraries(RaspberryAgent nlohmann_json nlohmann_json::nlohmann_json)

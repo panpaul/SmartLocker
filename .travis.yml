@@ -23,3 +23,9 @@ jobs:
         - cmake .. -DSeetaFace_DIR=/home/travis/build/panpaul/SmartLocker/face/SeetaFace2/build/install/lib/cmake
         - make
         - echo "=====Finished====="
+        - cd ../../../
+        - echo "=====Building RaspberryAgent====="
+        - cd ./face/RaspberryAgent && mkdir build && cd build
+        - cmake .. -Dncnn_DIR=/home/travis/build/panpaul/SmartLocker/face/ncnn/build/install/lib/cmake/ncnn -Dnlohmann_json_DIR=/home/travis/build/panpaul/SmartLocker/face/json/build/install/lib/cmake/nlohmann_json
+        - make
+        - echo "=====Finished====="

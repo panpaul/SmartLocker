@@ -7,6 +7,11 @@
 #include <iostream>
 #include <fstream>
 
+#if defined(linux) || defined(__LYNX)
+#include <unistd.h>
+#endif
+
+
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;

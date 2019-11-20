@@ -36,7 +36,12 @@ int main(int argc, char **argv) {
         //TODO upload it
 
         // sleep for 2 seconds
+#if defined(linux) || defined(__LYNX)
+        sleep(2);
+#endif
+#if defined(_WIN32)
         Sleep(2000);
+#endif
         break;
     }
 

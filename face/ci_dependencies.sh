@@ -24,3 +24,16 @@ cmake .. -DCMAKE_INSTALL_PREFIX=./install
 make -j4 && sudo make install
 
 echo "===Finished==="
+
+cd ../../../
+
+echo "===json==="
+
+git clone https://github.com/nlohmann/json.git ./face/json
+cd ./face/json || exit
+mkdir build
+cd build || exit
+cmake .. -DCMAKE_INSTALL_PREFIX=./install -DJSON_BuildTests=OFF -DBUILD_TESTING=OFF
+make -j4 && sudo make install
+
+echo "===Finished==="
