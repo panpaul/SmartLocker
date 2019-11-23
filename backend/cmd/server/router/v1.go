@@ -27,16 +27,18 @@ func initHttpAPIv1(apiV1 *gin.RouterGroup) {
 	article.POST("/release", HttpV1.ReleaseArticle)
 	article.POST("/info", HttpV1.LockerInfo)
 
-	face := apiV1.Group("/face")
-	face.POST("/recognize", HttpV1.RecognizeFace)
-
 	cabinet := apiV1.Group("/cabinet")
 	cabinet.GET("/location", HttpV1.GetCabinetLocations)
 	cabinet.POST("/cabinet", HttpV1.GetCabinetsByLocation)
+
+	face := apiV1.Group("/face")
+	face.POST("/recognize", HttpV1.RecognizeFace)
+	face.POST("/register", HttpV1.RegisterFace)
 }
 
 func initCabinetAPIv1(apiV1 *gin.RouterGroup) {
 	apiV1.POST("/ping", CabinetV1.PingPong)
 	apiV1.POST("/register", CabinetV1.Register)
 	apiV1.POST("/generateToken", CabinetV1.GenerateRegToken)
+	apiV1.POST("/task", CabinetV1.Task)
 }

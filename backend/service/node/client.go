@@ -7,6 +7,10 @@ import (
 	"strconv"
 )
 
+const (
+	Open = 0
+)
+
 func RegisterCabinet(name string, location string, lockerNum int) (int, bool) {
 	err := model.AddCabinet(name, location)
 	if err != nil {

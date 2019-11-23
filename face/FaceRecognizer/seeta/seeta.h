@@ -18,9 +18,9 @@ extern vector<string> ImageFilename;
 extern vector<string> ImageName;
 extern map<int64_t, string> ImageIndexMap;
 
-inline seeta::ModelSetting FD_model("./model/fd_2_00.dat", seeta::ModelSetting::CPU, 0);
-inline seeta::ModelSetting PD_model("./model/pd_2_00_pts5.dat", seeta::ModelSetting::CPU, 0);
-inline seeta::ModelSetting FR_model("./model/fr_2_10.dat", seeta::ModelSetting::CPU, 0);
+inline seeta::ModelSetting FD_model("./FaceBackend/model/fd_2_00.dat", seeta::ModelSetting::CPU, 0);
+inline seeta::ModelSetting PD_model("./FaceBackend/model/pd_2_00_pts5.dat", seeta::ModelSetting::CPU, 0);
+inline seeta::ModelSetting FR_model("./FaceBackend/model/fr_2_10.dat", seeta::ModelSetting::CPU, 0);
 extern inline seeta::FaceEngine engine(FD_model, PD_model, FR_model);
 
 extern float similarThreshold;

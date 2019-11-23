@@ -7,6 +7,7 @@ import (
 	"SmartLocker/model"
 	"SmartLocker/service/auth"
 	"SmartLocker/service/cache"
+	"SmartLocker/service/face"
 	"github.com/go-playground/log"
 	"github.com/urfave/cli"
 	"net/http"
@@ -18,6 +19,7 @@ import (
 func main() {
 	// init the helpers
 	logger.Setup()
+	face.Setup()
 
 	var configName string
 
