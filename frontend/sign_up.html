@@ -1,0 +1,47 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无标题文档</title>
+<link href="css/bootstrap-4.0.0.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="align-self-start" style="padding-bottom: 70px; padding-top: 70px;">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#">HackaPro</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active"> <a class="nav-link" href="#">Login <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#">About us</a> </li>
+    </ul>
+</div>
+</nav>
+<div class="container-fluid"></div>
+<br><br>
+<div class="container">
+  
+<form id="form1" name="form1" method="post">
+  Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="userName" type="text" required="required" id="userName" form="form1" placeholder="User Name" size="12" maxlength="10" ><br><br>
+	Password:&nbsp;&nbsp;&nbsp;<input name="Password" type="password" required="required" id="Password" placeholder="Password" size="12"><br><br>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button type="button" class="btn btn-primary" onclick="signup()">Submit</button><br>
+</form>
+<script>
+	function signup() {
+		let xhr = new XMLHttpRequest();
+		let url = "http://192.168.43.136:7070/api/v1/http/user/register"
+		xhr.open('POST', url , true)
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+		var userform = new FormData();
+		userform.append("userName",username);
+		userform.append("password",Password);
+		xhr.send(userform);
+	}
+</script>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无标题文档</title>
+<link href="css/bootstrap-4.0.0.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="align-self-start" style="padding-bottom: 70px; padding-top: 70px;">
+	<style>   
+		*{        
+		padding: 0;        
+		margin: 0;    
+		}    
+		.wrapper{        
+			width: 320px;        
+			height: 50px;        
+			margin: 20px auto;        
+			position: relative;        
+			border: 1px solid #f0f0f0;    
+		}    
+		.input{        
+			width: 100px;        
+			height: 30px;    
+		}    
+		.button{        
+			position: absolute;       
+			cursor: pointer;        
+			pointer-events: none;        
+			width: 100px;        
+			height: 30px;        
+			left: 0;        
+			top: 0;    
+		}   
+		.a{        
+			pointer-events: none;    
+		}    
+		.img{       
+			border: 1px solid #ccc;       
+			padding: 10px;    
+		}
+	</style> 
+		
+	  <form action="${pageContext.request.contextPath}/files/fileUpload" method="post" enctype="multipart/form-data" id="uploadvideoid">
+		  <div class = "wrapper">     
+			  <input type = "file" accept= "image/*" capture= "camera" id= "img" />     
+			  <button >上传照片 </button >
+
+	</div></form>
+	
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.0.0.js"></script>
+</body>
+</html>
