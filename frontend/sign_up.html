@@ -28,83 +28,20 @@
 	Password:&nbsp;&nbsp;&nbsp;<input name="Password" type="password" required="required" id="Password" placeholder="Password" size="12"><br><br>
 	<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<button type="button" class="btn btn-primary">Submit</button><br>
+	<button type="button" class="btn btn-primary" onclick="signup()">Submit</button><br>
 </form>
-	
-	<br>
-</div>
-<div class = "container">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <input type="button" class ="active" title="Take photo" value="Take Photo" onclick="getMedia()" /><br><br>
-  <video width="200" height="250" id="video" autoplay="autoplay" ></video>
-  <br><br>
-	<canvas id="canvas" width="200" height="250"></canvas><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<button id="photo" onclick="takePhoto()">拍照</button><br><br>
-	<button onclick="UploadPic()">上传</button>
-	</div>
-	
-	<script>    
-		let video = document.getElementById("video");
-		let canvas;
-		function getMedia() {        
-			let constraints = {            
-				video: {width: 200, height: 250},            
-				audio: true        
-			};             
-			let promise = navigator.mediaDevices.getUserMedia(constraints);        promise.then(function (MediaStream) {            
-				video.srcObject = MediaStream;            
-				video.play();        
-			}).catch(function (PermissionDeniedError) {            
-				console.log(PermissionDeniedError);        
-			})    
-		}    
-		function takePhoto() {               
-			 canvas = document.getElementById("canvas");        
-			let ctx = canvas.getContext('2d');        
-			ctx.drawImage(video, 0, 0, 200, 250);    
-		}
-		/*function UploadPic() {
-	 // Generate the image data
-	 var Pic = document.getElementById("canvas").toDataURL("image/png");
-	 Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
-	 // Sending the image data to Server
-	 $.post({
-		 url: 'http://192.168.43.136:7070',
-		 data: '{ "imageData" : "' + Pic + '" }',
-		 contentType: 'application/json; charset=utf-8',
-		 dataType: 'json',
-		 success: function (msg) {
-			 alert("Done, Picture Uploaded.");
-		 }
-	 });
-	 }              */
-	 function UploadPic(){
-		var Pic = document.getElementById("canvas").toDataURL("image/png");
-	 	Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "");
+<script>
+	function signup() {
 		let xhr = new XMLHttpRequest();
-		let url = "http://192.168.43.136:7070/api/v1/http/face/recognize"
+		let url = "http://192.168.43.136:7070/api/v1/http/user/register"
 		xhr.open('POST', url , true)
-		xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8')
-		xhr.send('{ "imageData" : "' + Pic + '" }');
-	 }
-	</script>
-
-
-<br><br>
-<div class="container">
-	<div class="row">
-	  <div class="col-7">
-		Designed by HackaPro.
-		  <br>All Rights Reserved.
-		</div>
-<div class="col-5"></div>
-	</div></div>
-
-
-
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap-4.0.0.js"></script>
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+		var userform = new FormData();
+		userform.append("userName",username);
+		userform.append("password",Password);
+		xhr.send(userform);
+	}
+</script>
 </body>
 </html>
 

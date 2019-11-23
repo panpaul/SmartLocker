@@ -1,0 +1,100 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无标题文档</title>
+<link href="css/bootstrap-4.0.0.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="align-self-start" style="padding-bottom: 70px; padding-top: 70px;">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#">HackaPro</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active"> <a class="nav-link" href="#">Login <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#">About us</a> </li>
+    </ul>
+</div>
+</nav>
+<div class="container-fluid"></div>
+<br><br>
+<div class = "container">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="button" class ="active" title="Take photo" value="Take Photo" onclick="getMedia()" /><br><br>
+  <video width="200" height="250" id="video" autoplay="autoplay" ></video>
+  <br><br>
+	<canvas id="canvas" width="200" height="250"></canvas><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button id="photo" onclick="takePhoto()">拍照</button><br><br>
+	<button onclick="UploadPic()">上传</button>
+	</div>
+	
+	<script>    
+		let video = document.getElementById("video");
+		let canvas;
+		function getMedia() {        
+			let constraints = {            
+				video: {width: 200, height: 250},            
+				audio: true        
+			};             
+			let promise = navigator.mediaDevices.getUserMedia(constraints);        promise.then(function (MediaStream) {            
+				video.srcObject = MediaStream;            
+				video.play();        
+			}).catch(function (PermissionDeniedError) {            
+				console.log(PermissionDeniedError);        
+			})    
+		}    
+		function takePhoto() {               
+			 canvas = document.getElementById("canvas");        
+			let ctx = canvas.getContext('2d');        
+			ctx.drawImage(video, 0, 0, 200, 250);    
+		}
+		/*function UploadPic() {
+	 // Generate the image data
+	 var Pic = document.getElementById("canvas").toDataURL("image/png");
+	 Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
+	 // Sending the image data to Server
+	 $.post({
+		 url: 'http://192.168.43.136:7070',
+		 data: '{ "imageData" : "' + Pic + '" }',
+		 contentType: 'application/json; charset=utf-8',
+		 dataType: 'json',
+		 success: function (msg) {
+			 alert("Done, Picture Uploaded.");
+		 }
+	 });
+	 }              */
+	 function UploadPic(){
+		var Pic = document.getElementById("canvas").toDataURL("image/png");
+	 	//Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "");
+		let xhr = new XMLHttpRequest();
+		let url = "http://192.168.43.136:7070/api/v1/http/face/recognize"
+		xhr.open('POST', url , true)
+		xhr.setRequestHeader('Content-Type', 'multipart/form-data')
+		var imageform = new FormData();
+		imageform.append("image",Pic);
+		xhr.send(imageform);
+	 }
+	</script>
+
+
+<br><br>
+<div class="container">
+	<div class="row">
+	  <div class="col-7">
+		Designed by HackaPro.
+		  <br>All Rights Reserved.
+		</div>
+<div class="col-5"></div>
+	</div></div>
+
+
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.0.0.js"></script>
+</body>
+</html>
+
