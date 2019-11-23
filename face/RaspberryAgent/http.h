@@ -12,6 +12,8 @@ struct MemoryStruct {
 
 std::string post(const std::string &address, const std::string &param);
 
+std::string postImg(const std::string &address, const std::string &imgPath);
+
 void closeCurl();
 
 #endif //RASPBERRYAGENT_HTTP_H

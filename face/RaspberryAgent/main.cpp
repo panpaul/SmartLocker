@@ -16,6 +16,11 @@ cv::VideoCapture cap(0);
 
 string getFace();
 
+template<class T>
+int length(T &arr) {
+    return sizeof(arr) / sizeof(arr[0]);
+}
+
 int main(int argc, char **argv) {
     // getConfig
     initConfig();
@@ -32,8 +37,17 @@ int main(int argc, char **argv) {
     while (true) {// main loop
         // getFace
         string filename = getFace();
+        if (!filename.empty()) {
+            string username = uploadImg(filename);
+            std::cout << "img name:" << username << std::endl;
+        }
+        std::vector<int> tasks;
+        getTask(tasks);
+        std::cout << "total task:" << tasks.size() << std::endl;
+        for (std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int> > >::value_type &task : tasks) {
+            std::cout << "task:" << task << std::endl;
+        }
 
-        //TODO upload it
 
         // sleep for 2 seconds
 #if defined(linux) || defined(__LYNX)
@@ -42,7 +56,7 @@ int main(int argc, char **argv) {
 #if defined(_WIN32)
         Sleep(2000);
 #endif
-        break;
+        //break;
     }
 
     closeCurl();
