@@ -43,15 +43,32 @@ func GetLockersByUid(id int) ([]*Locker, error) {
 	var lockers []*Locker
 	err := db.
 		Preload("CabinetInfo").
+		Preload("UserInfo").
 		Where("Uid = (?) AND Availability = 0", id).
 		Find(&lockers).
 		Error
 	return lockers, err
 }
 
-func ReleaseLockerById(id int) error {
+func GetLockerById(id int) (Locker, error) {
 	var result Locker
-	err := db.First(&result, id).Error
+	err := db.
+		Preload("CabinetInfo").
+		Preload("UserInfo").
+		First(&result, id).
+		Error
+	if err != nil {
+		return Locker{}, err
+	}
+	return result, nil
+}
+
+func ReleaseLockerById(id int, uid int) error {
+	var result Locker
+	err := db.
+		Where("uid = (?)", uid).
+		First(&result, id).
+		Error
 	if err != nil {
 		return err
 	}

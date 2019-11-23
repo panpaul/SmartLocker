@@ -7,6 +7,7 @@ import (
 	"SmartLocker/service/auth"
 	"SmartLocker/service/cache"
 	"SmartLocker/service/node"
+	"SmartLocker/service/task"
 	"SmartLocker/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -85,4 +86,20 @@ func GenerateRegToken(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, v1.Wrap(e.Success, randToken))
 	return
+}
+
+func Task(c *gin.Context) {
+	// make sure cid is a number
+	cid, err := strconv.Atoi(c.PostForm("cid"))
+	if err != nil {
+		c.JSON(http.StatusOK, v1.Wrap(e.InvalidParams, nil))
+		return
+	}
+	b, t := task.GetClientTask(strconv.Itoa(cid))
+	if !b {
+		c.JSON(http.StatusOK, v1.Wrap(e.TaskNotFound, nil))
+		return
+	}
+	task.ConsumeClientTask(strconv.Itoa(cid))
+	c.JSON(http.StatusOK, v1.Wrap(e.Success, t))
 }

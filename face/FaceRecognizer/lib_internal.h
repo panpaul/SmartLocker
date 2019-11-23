@@ -3,8 +3,10 @@
 
 #include "seeta/seeta.h"
 
-void init();
+extern "C" _declspec(dllexport) void init();
 
-bool addImage(char *name, char *path);
+extern "C" _declspec(dllexport) int addImage(char *name, char *path);
+
+extern "C" _declspec(dllexport) char *recognizer(char *path);
 
 #endif //FACERECOGNIZER_LIB_INTERNAL_H

@@ -4,6 +4,7 @@ import (
 	"SmartLocker/e"
 	"SmartLocker/service/article"
 	"SmartLocker/service/auth"
+	"SmartLocker/service/task"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -24,6 +25,19 @@ func OccupyArticle(c *gin.Context) {
 
 	a := article.Article{UserId: claim.Id, CabinetId: cid}
 	errInt := a.RandomOccupy()
+	if errInt != e.Success {
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
+		return
+	}
+
+	errInt = a.Fill()
+	if errInt != e.Success {
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
+		return
+	}
+
+	task.AddBackendTask(strconv.Itoa(cid), 0, a.Position, a.UserId)
+
 	c.JSON(http.StatusOK, Wrap(errInt, a))
 }
 
@@ -41,7 +55,21 @@ func ReleaseArticle(c *gin.Context) {
 	}
 
 	a := article.Article{Id: id, UserId: claim.Id}
-	errInt := a.Update(true)
+	// if do it later->uid=null
+	errInt := a.Fill()
+	if errInt != e.Success {
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
+		return
+	}
+
+	errInt = a.Update(true)
+	if errInt != e.Success {
+		c.JSON(http.StatusOK, Wrap(errInt, nil))
+		return
+	}
+
+	task.AddBackendTask(strconv.Itoa(a.CabinetId), 0, a.Position, a.UserId)
+
 	c.JSON(http.StatusOK, Wrap(errInt, nil))
 }
 

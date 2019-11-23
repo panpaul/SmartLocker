@@ -18,7 +18,7 @@ void loadData() {
     bool appendNew = exists("./FaceBackend/data/append.csv");
 
     if (!useDump && !appendNew) {
-        cerr << "Invalid input" << endl;
+        //cout << "Invalid input" << endl;
         return;
     }
 
@@ -32,7 +32,9 @@ void loadData() {
 
     if (!file) {
         string error_message = "No valid input file was given.";
-        CV_Error(cv::Error::StsBadArg, error_message);
+        //CV_Error(cv::Error::StsBadArg, error_message);
+        //cout << "No valid input file was given." << endl;
+        return;
     }
 
     //read data
@@ -54,11 +56,11 @@ void loadData() {
         //register face into face database
         string &filename = ImageFilename[i];
         int64_t &index = ImageIndex[i];
-        cout << "Registering: " << filename << " with name: " << ImageName[i] << endl;
+        //cout << "Registering: " << filename << " with name: " << ImageName[i] << endl;
         seeta::cv::ImageData image = cv::imread(filename);
         auto idImage = engine.Register(image);
         index = idImage;
-        cout << "Registered id = " << idImage << endl;
+        //cout << "Registered id = " << idImage << endl;
     }
 
     for (size_t i = 0; i < ImageIndex.size(); ++i) {
@@ -69,10 +71,10 @@ void loadData() {
 
     //save data
     if (!(useDump && (!appendNew))) {
-        cout << "Saving" << endl;
+        //cout << "Saving" << endl;
         FILE *fpWrite = fopen("./FaceBackend/data/dump.inf", "a");
         if (fpWrite == nullptr) {
-            cerr << "Could not save" << endl;
+            cout << "Could not save" << endl;
             return;
         }
         for (size_t i = 0; i < ImageIndexMap.size(); ++i) {
@@ -84,12 +86,12 @@ void loadData() {
     //save dump
     int e = remove("./FaceBackend/data/dump.data");
     if (e != 0) {
-        cerr << "could not delete previous file" << endl;
+        //cout << "could not delete previous file" << endl;
         //return;
     }
     bool status = engine.Save("./FaceBackend/data/dump.data");
     if (!status) {
-        cerr << "could not save database" << endl;
+        //cout << "could not save database" << endl;
     }
 }
 
@@ -103,7 +105,7 @@ int addFace(string name, string filename) {
 
     FILE *fpWrite = fopen("./FaceBackend/data/dump.inf", "a");
     if (fpWrite == nullptr) {
-        cerr << "Could not save" << endl;
+        //cout << "Could not save" << endl;
         return idImage;
     }
     fprintf(fpWrite, "%zu,%s\n", idImage, name.c_str());
@@ -111,12 +113,12 @@ int addFace(string name, string filename) {
 
     int e = remove("./FaceBackend/data/dump.data");
     if (e != 0) {
-        cerr << "could not delete previous file" << endl;
+        //cout << "could not delete previous file" << endl;
         //return;
     }
     bool status = engine.Save("./FaceBackend/data/dump.data");
     if (!status) {
-        cerr << "could not save database" << endl;
+        //cout << "could not save database" << endl;
     }
 
     return idImage;

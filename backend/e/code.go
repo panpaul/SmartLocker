@@ -19,6 +19,7 @@ const (
 	NotFound           = 200
 	NoMoreLocker       = 201
 	CacheNotFound      = 202
+	TaskNotFound       = 203
 	Unauthorized       = 300
 	PermissionDenied   = 301
 	InvalidParams      = 400

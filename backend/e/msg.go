@@ -19,6 +19,7 @@ var MsgFlags = map[int]string{
 	JsonUnmarshalError: "Json解析错误",
 	CacheNotFound:      "缓存不存在",
 	UsernameInvalid:    "用户名不能以数字开头",
+	TaskNotFound:       "无任务",
 }
 
 func GetMsg(code int) string {

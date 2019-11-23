@@ -57,7 +57,7 @@ func (a *Article) Update(release bool) int { // Param:Id(UserId)
 
 	var err error
 	if release {
-		err = model.ReleaseLockerById(a.Id)
+		err = model.ReleaseLockerById(a.Id, a.UserId)
 	} else {
 		err = model.OccupyLockerById(a.Id, a.UserId)
 	}
@@ -66,5 +66,18 @@ func (a *Article) Update(release bool) int { // Param:Id(UserId)
 		log.WithError(err).Warn("Couldn't update locker's info")
 		return e.InternalError
 	}
+	return e.Success
+}
+
+func (a *Article) Fill() int {
+	l, err := model.GetLockerById(a.Id)
+	if err != nil {
+		log.WithError(err).Info("Couldn't get locker's info")
+		return e.InternalError
+	}
+	a.Position = l.Position
+	a.CabinetId = l.Cid
+	a.CabinetLocation = l.CabinetInfo.Location
+	a.CabinetName = l.CabinetInfo.Name
 	return e.Success
 }

@@ -2,6 +2,7 @@ package router
 
 import (
 	"SmartLocker/config"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -12,6 +13,13 @@ func InitRouters() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"POST", "GET", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Cookie"},
+		AllowCredentials: true,
+	}))
 
 	// config
 	r.MaxMultipartMemory = 8 << 20
