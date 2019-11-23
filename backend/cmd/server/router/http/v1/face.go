@@ -29,18 +29,15 @@ func checkTask(name string) {
 	if !b {
 		return
 	}
-	var tt map[string]int
-	tt = make(map[string]int)
+
 	for _, i := range t {
 		s := strings.Split(i, "-")
 		if len(s) != 2 {
 			continue
 		}
-		ii, _ := strconv.Atoi(s[0])
-		tt[s[1]] = ii
-	}
-	for k, v := range tt {
-		task.AddClientTask(k, 0, v)
+		// id->position s[1]->cid
+		id, _ := strconv.Atoi(s[0])
+		task.AddClientTask(s[1], 0, id)
 	}
 	task.ConsumeBackendTask(name)
 }
