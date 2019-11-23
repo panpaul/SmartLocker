@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>main</title>
+<link href="css/bootstrap-4.0.0.css" rel="stylesheet" type="text/css">
+</head>
+
+<body style="padding-top: 70px">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#">Hackapro</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+ 
+</nav>
+<div class="container">
+<h1>Smart Locker</h1>	
+</div>
+<div class="container">
+  <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+    <button type="button" class="btn btn-secondary" onClick="store()">Store My Aticles</button>
+    <button type="button" class="btn btn-secondary" onClick="get()">Get My Articles</button>
+	<button type="button" class="btn btn-secondary">Query Information</button>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown </button>
+      <div class="dropdown-menu"> <a class="dropdown-item" href="#">Dropdown link 1</a> <a class="dropdown-item" href="#">Dropdown link 2</a> </div>
+    </div>
+  </div>
+</div>
+<br>
+<div id="status" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<span style="font-size: 2rem">status......</span></div> 
+<br>
+<div id = "position">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<span style="font-size: 2rem">position.......</span></div>
+
+
+<script>
+
+	function store(){
+			var xhr = null;
+		if (window.XMLHttpRequest){
+			let xhr = new XMLHttpRequest();
+		} 
+		else{
+			let xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}	
+		xhr.open("POST", "http://192.168.43.136:7070/api/v1/http/face/recognize", true); 
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
+		var userform = new FormData();
+		userform.append("userName", username);
+		userform.append("password", Password);
+		xhr.send(userform);
+	
+		let str = xhr.responseText; 
+		var i = 0;
+		function parseValue() { 
+			if (str[i] === '{') { return parseObject() } 
+			else if (str[i] === '[') { 
+				return parseArray()； } 
+			else if (str[i] === 'n') { 
+				return parseNull()； } 
+			else if (str[i] === 't') { 
+				return parseTrue()； } 
+			else if (str[i] === 'f') { 
+				return parseFalse()； } 
+			else if (str[i] === '"') { 
+				return parseString()； } 
+			else {
+				return parseNumber()；
+			} } 
+		
+		function parseString() { 
+			var result = ''; 
+			i++;
+			while(str[i] != '"') { 
+				result += str[i++]; } 
+			i++;
+			return result; } 
+		
+		function parseNull() { 
+			content = str.substr(i, 4); 
+			if (content === 'null') { 
+				i += 4 return null; } 
+			else { 
+				throw new Error('Unexpected char at pos: ' + i); 
+			} } 
+
+		function parseFalse() { 
+			var content = str.substr(i, 5);
+			if (content === 'false') { 
+				i += 5 return false; } 
+			else { throw new Error('Unexpected char at pos: ' + i);
+				 } } 
+		function parseTrue() { 
+			var content = str.substr(i, 4);
+			if (content === 'true') { i += 4 return true; }
+			else { throw new Error('Unexpected char at pos: ' + i); } 
+		} 
+
+		function parseNumber() {
+			var numStr = '';
+			while (isNumberChar(str[i])) { 
+				numStr += str[i++]; } 
+			return parseFloat(numStr); }
+		
+		function isNumberChar(c) { 
+			var chars = { '-': true, '+': true, 'e': true, 'E': true, '.': true } 
+			if (chars[c]) { return true; } 
+			if (c >= '0' && c <= '9') { return true; } 
+			return false;
+		} 
+		function parseArray() { 
+			i++ ；
+			var result = []；
+			while(str[i] !== ']') { 
+				result.push(parseValue()) ；
+				if (str[i] === ',') { 
+					i++ ；
+				} 
+			} 
+			i++； 
+			return result；
+		} 
+		function parseObject() { 
+			i++ ；
+			var result = {}；
+			while(str[i] !== '}') { 
+				var key = parseString()； 
+				i++；
+				var value = parseValue()； 
+				result[key] = value ；
+				if (str[i] === ',') { 
+					i++ ；
+				} } 
+			i++ ；
+			return result； } 
+		
+	if (parseValue() == 0){
+		var status = "Success";
+		}
+	else if(parseValue == 101){
+		var status = "Fail to Sign in";
+	}
+	else if(parseValue == 102){
+		var status = "Upload Failed";
+	}
+	else if(parseValue == 103){
+		var status = "Cache Error";
+	}
+	else if(parseValue == 104){
+		var status = "Fail to Parse Json";
+	}
+	else if(parseValue == 200){
+		var status = "Data Unfound";
+	}
+	else if(parseValue == 201){
+		var status = "Full Cabinet";
+	}
+	else if(parseValue == 202){
+		var status = "Cache Unfound";
+	}
+	else if(parseValue == 300){
+		var status = "Authentification Failed";
+	}
+	else if(parseValue == 301){
+		var status = "No Access";
+	}
+	else if(parseValue == 400){
+		var status = "Parameter Error";
+	}
+	else if(parseValue == 401){
+		var status = "Illegal Token";
+	}
+	else if(parseValue == 402){
+		var status = "Invalid Token";
+	}
+	else if(parseValue == 403){
+		var status = "File Type Mismatch";
+	}
+	else if(parseValue == 404){
+		var status = "Invalid User Name";
+	}
+	else if(parseValue == 500){
+		var status = "Authentification Timeout";
+	}
+	else if(parseValue == 401){
+		var status = "The User Name has been Occupied";
+	}
+	document.getElementById("status").innerHTML = status;
+
+	parseValue();
+	document.getElementById("position").innerHTML = parseValue();
+}
+</script>
+<script>
+	function get(){
+			var xhr = null;
+		if (window.XMLHttpRequest){
+			let xhr = new XMLHttpRequest();
+		} 
+		else{
+			let xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}	
+		xhr.open("POST", "http://192.168.43.136:7070/api/v1/http/face/recognize", true); 
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
+		var userform = new FormData();
+		userform.append("userName", username);
+		userform.append("password", Password);
+		xhr.send(userform);
+	
+		let str = xhr.responseText; 
+		var i = 0;
+		function parseValue() { 
+			if (str[i] === '{') { return parseObject() } 
+			else if (str[i] === '[') { 
+				return parseArray()； } 
+			else if (str[i] === 'n') { 
+				return parseNull()； } 
+			else if (str[i] === 't') { 
+				return parseTrue()； } 
+			else if (str[i] === 'f') { 
+				return parseFalse()； } 
+			else if (str[i] === '"') { 
+				return parseString()； } 
+			else {
+				return parseNumber()；
+			} } 
+		
+		function parseString() { 
+			var result = ''; 
+			i++;
+			while(str[i] != '"') { 
+				result += str[i++]; } 
+			i++;
+			return result; } 
+		
+		function parseNull() { 
+			content = str.substr(i, 4); 
+			if (content === 'null') { 
+				i += 4 return null; } 
+			else { 
+				throw new Error('Unexpected char at pos: ' + i); 
+			} } 
+
+		function parseFalse() { 
+			var content = str.substr(i, 5);
+			if (content === 'false') { 
+				i += 5 return false; } 
+			else { throw new Error('Unexpected char at pos: ' + i);
+				 } } 
+		function parseTrue() { 
+			var content = str.substr(i, 4);
+			if (content === 'true') { i += 4 return true; }
+			else { throw new Error('Unexpected char at pos: ' + i); } 
+		} 
+
+		function parseNumber() {
+			var numStr = '';
+			while (isNumberChar(str[i])) { 
+				numStr += str[i++]; } 
+			return parseFloat(numStr); }
+		
+		function isNumberChar(c) { 
+			var chars = { '-': true, '+': true, 'e': true, 'E': true, '.': true } 
+			if (chars[c]) { return true; } 
+			if (c >= '0' && c <= '9') { return true; } 
+			return false;
+		} 
+		function parseArray() { 
+			i++ ；
+			var result = []；
+			while(str[i] !== ']') { 
+				result.push(parseValue()) ；
+				if (str[i] === ',') { 
+					i++ ；
+				} 
+			} 
+			i++； 
+			return result；
+		} 
+		function parseObject() { 
+			i++ ；
+			var result = {}；
+			while(str[i] !== '}') { 
+				var key = parseString()； 
+				i++；
+				var value = parseValue()； 
+				result[key] = value ；
+				if (str[i] === ',') { 
+					i++ ；
+				} } 
+			i++ ；
+			return result； } 
+		
+	if (parseValue() == 0){
+		var status = "Success";
+		}
+	else if(parseValue == 101){
+		var status = "Fail to Sign in";
+	}
+	else if(parseValue == 102){
+		var status = "Upload Failed";
+	}
+	else if(parseValue == 103){
+		var status = "Cache Error";
+	}
+	else if(parseValue == 104){
+		var status = "Fail to Parse Json";
+	}
+	else if(parseValue == 200){
+		var status = "Data Unfound";
+	}
+	else if(parseValue == 201){
+		var status = "Full Cabinet";
+	}
+	else if(parseValue == 202){
+		var status = "Cache Unfound";
+	}
+	else if(parseValue == 300){
+		var status = "Authentification Failed";
+	}
+	else if(parseValue == 301){
+		var status = "No Access";
+	}
+	else if(parseValue == 400){
+		var status = "Parameter Error";
+	}
+	else if(parseValue == 401){
+		var status = "Illegal Token";
+	}
+	else if(parseValue == 402){
+		var status = "Invalid Token";
+	}
+	else if(parseValue == 403){
+		var status = "File Type Mismatch";
+	}
+	else if(parseValue == 404){
+		var status = "Invalid User Name";
+	}
+	else if(parseValue == 500){
+		var status = "Authentification Timeout";
+	}
+	else if(parseValue == 401){
+		var status = "The User Name has been Occupied";
+	}
+		
+	document.getElementById("status").innerHTML = status;
+</script>
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.0.0.js"></script>
+</body>
+</html>
