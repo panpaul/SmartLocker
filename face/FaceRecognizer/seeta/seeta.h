@@ -29,4 +29,6 @@ void initSeetaEngine();
 
 void loadData();
 
+int addFace(string name, string filename);
+
 #endif //FACERECOGNIZER_SEETA_H

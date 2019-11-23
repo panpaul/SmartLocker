@@ -92,3 +92,22 @@ void loadData() {
         cerr << "could not save database" << endl;
     }
 }
+
+int addFace(string name, string filename) {
+    seeta::cv::ImageData image = cv::imread(filename);
+    auto idImage = engine.Register(image);
+    if (idImage == -1) {
+        return -1;
+    }
+    ImageIndexMap.insert(make_pair(idImage, name));
+
+    FILE *fpWrite = fopen("./data/dump.inf", "a");
+    if (fpWrite == nullptr) {
+        cerr << "Could not save" << endl;
+        return idImage;
+    }
+    fprintf(fpWrite, "%zu,%s\n", idImage, name.c_str());
+    fclose(fpWrite);
+
+    return idImage;
+}

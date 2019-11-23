@@ -37,12 +37,10 @@ func CheckToken(tokenRaw string) (*Claims, int) {
 			return key, nil
 		})
 
-	if err != nil {
+	/*if err != nil {
 		log.WithError(err).Debug("parse claims")
 		return nil, e.InternalError
-	}
-
-	//log.Debug(reflect.TypeOf(token.Claims),reflect.ValueOf(token.Claims))
+	}*/
 
 	if token.Valid {
 		c := token.Claims.(*Claims)

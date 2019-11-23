@@ -2,19 +2,24 @@ package v1
 
 import (
 	"SmartLocker/e"
-	"github.com/gin-gonic/gin"
 )
 
-func Wrap(err int, body interface{}) gin.H {
+type Response struct {
+	Code int         `json:"code"`
+	Msg  string      `json:"msg"`
+	Body interface{} `json:"body"`
+}
+
+func Wrap(err int, body interface{}) interface{} {
 	if err != e.Success {
-		return gin.H{
-			"code": err,
-			"msg":  e.GetMsg(err),
+		return Response{
+			Code: err,
+			Msg:  e.GetMsg(err),
 		}
 	}
-	return gin.H{
-		"code": e.Success,
-		"msg":  e.GetMsg(e.Success),
-		"body": body,
+	return Response{
+		Code: e.Success,
+		Msg:  e.GetMsg(e.Success),
+		Body: body,
 	}
 }
