@@ -44,6 +44,16 @@ void getTask(std::vector<int> &vec) {
     }
 }
 
-int pingPong() {
-    return 1;
+bool pingPong() {
+    std::string param = "&cid=" + std::to_string(config.cid) + "&regToken=" + config.token;
+    std::string addr = config.address + "/api/v1/cabinet/ping";
+    std::string r = post(addr, param);
+    std::cout << "raw ping pong:" << r << std::endl;
+
+    auto j = json::parse(r);
+    auto code = j["code"].get<int>();
+    if (code != 0) {
+        return false;
+    }
+    return true;
 }

@@ -8,10 +8,10 @@
 
 int regist();
 
-std::string uploadImg(std::strinconst g filepath) &;
+std::string uploadImg(const std::string &filepath);
 
 void getTask(std::vector<int> &vec);
 
-int pingPong();
+bool pingPong();
 
 #endif //RASPBERRYAGENT_CONNECT_H
