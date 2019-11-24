@@ -28,7 +28,28 @@ func UserRegister(c *gin.Context) {
 
 	u := user.User{Username: username, Password: []byte(password)}
 	err := u.Register()
-	c.JSON(http.StatusOK, Wrap(err, nil))
+	if err != e.Success {
+		c.JSON(http.StatusOK, Wrap(err, nil))
+		return
+	}
+	// fill up
+	err = u.Get()
+	if err != e.Success {
+		c.JSON(http.StatusOK, Wrap(err, nil))
+		return
+	}
+
+	//生成jwt token
+	expTime := time.Now().Add(12 * time.Hour).Unix()
+	claim := auth.Claims{Username: u.Username, Role: u.Id, Id: u.Id}
+	claim.ExpiresAt = expTime
+
+	token := claim.GenerateToken()
+	if token == "" {
+		c.JSON(http.StatusOK, Wrap(e.InternalError, nil))
+		return
+	}
+	c.JSON(http.StatusOK, Wrap(e.Success, token))
 }
 
 func UserLogin(c *gin.Context) { //密码是明文

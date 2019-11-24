@@ -40,5 +40,4 @@ char *recognizer(char *path) {
         }
     }
     return "";
-
 }
