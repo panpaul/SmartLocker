@@ -18,13 +18,18 @@
 </div>
 <div class="container">
   <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-	  
-    <button type="button" class="btn btn-secondary" onClick="store()">Store My Aticles</button>
-    <button type="button" class="btn btn-secondary" onClick="get()">Get My Articles</button>
-	<button type="button" class="btn btn-secondary">Query Information</button>
+    <button type="button" class="btn btn-secondary">Query Information</button>
+	<button type="button" class="btn btn-secondary" onClick="get()">Get My Articles</button>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown </button>
-      <div class="dropdown-menu"> <a class="dropdown-item" href="#">Dropdown link 1</a> <a class="dropdown-item" href="#">Dropdown link 2</a> </div>
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Store My Articles </button>
+      <div class="dropdown-menu"> 
+		  <a class="dropdown-item" onClick = "store(1)">Cabinet 1</a>
+		  <a class="dropdown-item" onClick = "store(2)">Cabinet 2</a> 
+		  <a class="dropdown-item" onClick = "store(3)">Cabinet 3</a>
+		  <a class="dropdown-item" onClick = "store(4)">Cabinet 4</a>
+		  <a class="dropdown-item" onClick = "store(5)">Cabinet 5</a>
+		  <a class="dropdown-item" onClick = "store(6)">Cabinet 6</a>
+		</div>
     </div>
 </div>
 </div>
@@ -38,6 +43,7 @@
 
 <script>
 var i = 0;
+
 function getCookie(name)
 	{
     	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
@@ -46,17 +52,17 @@ function getCookie(name)
     	else
         return null;
 	} 
-	function store(){
-			var xhr = null;
-			var cabinetId = document.getElementById("cabinetId");
+	function store(cid){
+		var xhr = null;
+		var cabinetId = cid;
 		if (window.XMLHttpRequest){
 			xhr = new XMLHttpRequest();
 		} 
 		else{
 			xhr = new ActiveXObject("Microsoft.XMLHTTP");
 		}	
-		xhr.open("POST", ip + "/api/v1/http/face/recognize", true); 
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
+		xhr.open("POST", ip + "/api/v1/http/article/occupy", true); 
+		//xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
 		var userform = new FormData();
 		var token = getCookie("token");
 		if (token == null )
@@ -64,15 +70,19 @@ function getCookie(name)
 		else{
 			
 			userform.append("token", token);
-			userform.append("cabinetId", cabinetId);
-			xhr.send(userform);
+			userform.append("cid", cabinetId);
+			var str;
+			xhr.onreadystatechange=function()
+		{
+    		if (xhr.readyState==4 && xhr.status==200)
+    		{
+				str =JSON.parse(xhr.responseText);
+				document.getElementById("status").innerHTML = parseCode(str.code);
+			document.getElementById("position").innerHTML = str.body.Position;
+    		}
+		};
+			xhr.send(userform);			
 		}
-		let str = xhr.responseText; 
-		
-	document.getElementById("status").innerHTML = parseCode();
-
-	parseValue();
-	document.getElementById("position").innerHTML = parseValue();
 }
 	
 	function get(){
@@ -86,17 +96,21 @@ function getCookie(name)
 		xhr.open("POST", ip + "/api/v1/http/face/recognize", true); 
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
 		var userform = new FormData();
-		userform.append("userName", username);
-		userform.append("password", Password);
-		xhr.send(userform);
-	
-		let str = xhr.responseText; 
-		document.getElementById("status").innerHTML = parseCode();
+		if (token == null )
+			alert("Error");
+		else{
+			
+			userform.append("token", token);
+			userform.append("cabinetId", cabinetId);
+			xhr.send(userform);
+			let str = xhr.responseText; 
+			document.getElementById("status").innerHTML = parseCode();
+		}
 	}
 	
 	
-function parseCode(){
-	if (parseValue() == 0){
+function parseCode(parseValue){
+	if (parseValue == 0){
 		var status = "Success";
 		}
 	else if(parseValue == 101){
@@ -147,93 +161,8 @@ function parseCode(){
 	else if(parseValue == 401){
 		var status = "The User Name has been Occupied";
 	}
-	
 	return status;
 }
-		function parseValue() { 
-			if (str[i] === '{') { return parseObject() } 
-			else if (str[i] === '[') { 
-				return parseArray(); } 
-			else if (str[i] === 'n') { 
-				return parseNull(); } 
-			else if (str[i] === 't') { 
-				return parseTrue(); } 
-			else if (str[i] === 'f') { 
-				return parseFalse(); } 
-			else if (str[i] === '"') { 
-				return parseString(); } 
-			else {
-				return parseNumber();
-			} } 
-		
-		function parseString() { 
-			var result = ''; 
-			i++;
-			while(str[i] != '"') { 
-				result += str[i++]; } 
-			i++;
-			return result; } 
-		
-		function parseNull() { 
-			content = str.substr(i, 4); 
-			if (content === 'null') { 
-				i += 4; return null; } 
-			else { 
-				throw new Error('Unexpected char at pos: ' + i); 
-			} } 
-
-		function parseFalse() { 
-			var content = str.substr(i, 5);
-			if (content === 'false') { 
-				i += 5; return false; } 
-			else { throw new Error('Unexpected char at pos: ' + i);
-				 } } 
-		function parseTrue() { 
-			var content = str.substr(i, 4);
-			if (content === 'true') { i += 4; return true; }
-			else { throw new Error('Unexpected char at pos: ' + i); } 
-		} 
-
-		function parseNumber() {
-			var numStr = '';
-			while (isNumberChar(str[i])) { 
-				numStr += str[i++]; } 
-			return parseFloat(numStr); }
-		
-		function isNumberChar(c) { 
-			var chars = { '-': true, '+': true, 'e': true, 'E': true, '.': true } 
-			if (chars[c]) { return true; } 
-			if (c >= '0' && c <= '9') { return true; } 
-			return false;
-		} 
-		function parseArray() { 
-			i++ ;
-			var result = [];
-			while(str[i] !== ']') { 
-				result.push(parseValue()) ;
-				if (str[i] === ',') { 
-					i++ ;
-				} 
-			} 
-			i++; 
-			return result;
-		} 
-		function parseObject() { 
-			i++ ;
-			var result = {};
-			while(str[i] !== '}') { 
-				var key = parseString(); 
-				i++;
-				var value = parseValue(); 
-				result[key] = value ;
-				if (str[i] === ',') { 
-					i++ ;
-				} } 
-			i++ ;
-			return result; } 
-		
-
-	
 	</script>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/popper.min.js"></script>
