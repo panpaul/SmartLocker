@@ -22,7 +22,19 @@ func PingPong(c *gin.Context) {
 		return
 	}
 
+	token := c.PostForm("regToken")
+	if token == "" {
+		c.JSON(http.StatusOK, v1.Wrap(e.InvalidParams, nil))
+		return
+	}
+
 	name, status := cache.NodePingPong(strconv.Itoa(cid))
+	if !status {
+		c.JSON(http.StatusOK, v1.Wrap(e.Unauthorized, nil))
+		return
+	}
+
+	status = cache.CheckToken(name, token)
 	if !status {
 		c.JSON(http.StatusOK, v1.Wrap(e.Unauthorized, nil))
 		return
