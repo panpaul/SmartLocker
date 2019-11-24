@@ -2,6 +2,7 @@ package v1
 
 import (
 	"SmartLocker/e"
+	"SmartLocker/service/auth"
 	"SmartLocker/service/face"
 	"SmartLocker/service/task"
 	"SmartLocker/util"
@@ -43,21 +44,24 @@ func checkTask(name string) {
 }
 
 func RegisterFace(c *gin.Context) {
-	name := c.PostForm("name")
-	if name == "" {
-		c.JSON(http.StatusOK, Wrap(e.InvalidParams, nil))
+	token := c.PostForm("token")
+	claim, err := auth.CheckToken(token)
+	if err != e.Success {
+		c.JSON(http.StatusOK, Wrap(err, nil))
 		return
 	}
+
 	url := verifyImgAndSave(c)
 	if url == "" {
 		return
 	}
 
-	s := face.InsertImage("", url)
+	s := face.InsertImage(claim.Username, url)
 	if !s {
 		c.JSON(http.StatusOK, Wrap(e.RegistrationFailed, nil))
 		return
 	}
+
 	c.JSON(http.StatusOK, Wrap(e.Success, nil))
 }
 
