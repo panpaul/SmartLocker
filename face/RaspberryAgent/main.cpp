@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
         std::vector<int> tasks;
         getTask(tasks);
         std::cout << "total task:" << tasks.size() << std::endl;
-        for (std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int> > >::value_type &task : tasks) {
+        for (const auto &task : tasks) {
             std::cout << "task:" << task << std::endl;
         }
 
