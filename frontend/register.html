@@ -74,13 +74,19 @@
     	else
         return null;
 	} 
+	
+	var img;
+	var newImg;
 	 function UploadPic(){
-		var Pic = document.getElementById("canvas").toDataURL("image/png");
-		Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
+		canvas.toBlob(function(blob) {
+			var imgurl = URL.createObjectURL(blob);img = blob;
+			var newImg = document.createElement("img");
+			newImg.src = url;
+		});
 		let xhr = new XMLHttpRequest();
 		let url = ip + "/api/v1/http/face/register"
 		xhr.open('POST', url , true)
-		xhr.setRequestHeader('Content-Type', 'multipart/form-data')
+		//xhr.setRequestHeader('Content-Type', 'multipart/form-data')
 		var imageform = new FormData();
 		var token = getCookie("token");
 		if (token == null) {
@@ -88,8 +94,17 @@
 		} else
 		{
 		imageform.append("token",token);
-		imageform.append("img",Pic);
+		imageform.append("img",img,"1.png");
 		xhr.send(imageform);
+		}
+		request.onreadystatechange=function()
+		{
+    		if (request.readyState==4 && request.status==200)
+    		{
+        		var response =JSON.parse(request.responseText);
+				var token = response.body;
+				document.cookie = "token=" + token;
+    		}
 		}
 	 }
 	</script>
