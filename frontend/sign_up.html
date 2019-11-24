@@ -23,8 +23,8 @@
 <br><br>
 <div class="container">
   
-<form id="form1" name="form1" method="post">
-  Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="userName" type="text" required="required" id="userName" form="form1" placeholder="User Name" size="12" maxlength="10" ><br><br>
+<form enctype="application/x-www-form-urlencoded" method="post" name="form" id="form">  Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	<input name="userName" type="text" required="required" id="userName" form="form1" placeholder="User Name" size="12" maxlength="10" ><br><br>
 	Password:&nbsp;&nbsp;&nbsp;<input name="Password" type="password" required="required" id="Password" placeholder="Password" size="12"><br><br>
 	<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -32,16 +32,25 @@
 </form>
 <script>
 	function signup() {
-		let xhr = new XMLHttpRequest();
-		let url = "http://192.168.43.136:7070/api/v1/http/user/register"
-		xhr.open('POST', url , true)
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-		var userform = new FormData();
-		userform.append("userName",username);
-		userform.append("password",Password);
-		xhr.send(userform);
+		let request = new XMLHttpRequest();
+		request.open("POST", ip + "/api/v1/http/user/register");
+		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+		var username = document.getElementById("userName").value
+		var password = document.getElementById("Password").value
+		request.send("username=" + username +"&password=" + password);
+		
+		request.onreadystatechange=function()
+		{
+    		if (request.readyState==4 && request.status==200)
+    		{
+        		var response =JSON.parse(request.responseText);
+				var token = response.body;
+				document.cookie = "token=" + token;
+    		}
+		}
 	}
 </script>
+<script src="js/ip.js"></script>
 </body>
 </html>
 
