@@ -3,6 +3,8 @@
 #include "connect.h"
 #include <opencv2/opencv.hpp>
 #include "UltraFace.h"
+#include <wiringPi.h>
+#include <softPwm.h>
 
 using namespace std;
 
@@ -21,6 +23,10 @@ string getFace();
 void processFace();
 
 int main(int argc, char **argv) {
+	// init gpio
+	wiringPiSetup();
+	softPwmCreate(1,15,200);
+	delay(1000);
     // getConfig
     initConfig();
     // register
@@ -49,6 +55,11 @@ int main(int argc, char **argv) {
         std::cout << "total task:" << tasks.size() << std::endl;
         for (const auto &task : tasks) {
             std::cout << "task:" << task << std::endl;
+			softPwmWrite(task,5);
+			cout<<"start"<<endl;
+			delay(10000);
+			cout<<"end"<<endl;
+			softPwmWrite(task,15);
         }
 
         // sleep for 2 seconds

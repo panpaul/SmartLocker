@@ -20,3 +20,5 @@ target_link_libraries(RaspberryAgent CURL::libcurl)
 find_package(nlohmann_json REQUIRED)
 target_include_directories(RaspberryAgent PRIVATE ${nlohmann_json_INCLUDE_DIR})
 target_link_libraries(RaspberryAgent nlohmann_json nlohmann_json::nlohmann_json)
+
+target_link_libraries(RaspberryAgent wiringPi)
