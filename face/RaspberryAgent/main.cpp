@@ -10,16 +10,15 @@ using namespace std;
 default_random_engine randomEngine(time(nullptr));
 // init NCNN engine
 UltraFace ultraface("./model/RFB-320.bin", "./model/RFB-320.param", 320, 2, 0.75); // config model input
+
 // get VideoCapture instance
 cv::VideoCapture cap(0);
-
+// the mat to store camera image
+cv::Mat frame;
 
 string getFace();
 
-template<class T>
-int length(T &arr) {
-    return sizeof(arr) / sizeof(arr[0]);
-}
+void processFace();
 
 int main(int argc, char **argv) {
     // getConfig
@@ -35,19 +34,22 @@ int main(int argc, char **argv) {
     writeConfig();
 
     while (true) {// main loop
-        // getFace
-        string filename = getFace();
-        if (!filename.empty()) {
-            string username = uploadImg(filename);
-            std::cout << "img name:" << username << std::endl;
+        // ping pong
+        auto ppStatus = pingPong();
+        if (!ppStatus) {
+            break;
         }
+
+        processFace();
+        cv::imshow("RaspberryAgent", frame);
+        cv::waitKey(1);
+
         std::vector<int> tasks;
         getTask(tasks);
         std::cout << "total task:" << tasks.size() << std::endl;
         for (std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int> > >::value_type &task : tasks) {
             std::cout << "task:" << task << std::endl;
         }
-
 
         // sleep for 2 seconds
 #if defined(linux) || defined(__LYNX)
@@ -56,16 +58,39 @@ int main(int argc, char **argv) {
 #if defined(_WIN32)
         Sleep(2000);
 #endif
-        //break;
     }
 
     closeCurl();
     return 0;
 }
 
+void processFace() {
+    // getFace
+    string filename = getFace();
+    if (filename.empty()) {
+        return;
+    }
+    if (filename == "0") {
+        cv::putText(frame, "no faces detected", cv::Point(0, 10), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                    cv::Scalar(0, 0, 255));
+        return;
+    } else if (filename == "1") {
+        cv::putText(frame, "only one face allowed", cv::Point(0, 10), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                    cv::Scalar(0, 0, 255));
+        return;
+    }
+    string username = uploadImg(filename);
+    std::cout << "img name:" << username << std::endl;
+    if (username.empty()) {
+        cv::putText(frame, "Couldn't recognize. Try again", cv::Point(0, frame.rows - 5), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                    cv::Scalar(0, 0, 255));
+        return;
+    }
+    cv::putText(frame, username, cv::Point(0, frame.rows - 5), cv::FONT_HERSHEY_SIMPLEX, 0.5,
+                cv::Scalar(0, 0, 255));
+}
+
 string getFace() {
-    // the mat to store camera image
-    cv::Mat frame;
     // get the frame
     cap >> frame;
     // resize to 320*240
@@ -79,20 +104,25 @@ string getFace() {
     ultraface.detect(inMat, face_info);
 
     if (face_info.empty()) { // no faces found
-        return "";
+        return "0";
     }
 
     if (face_info.size() > 1) { // more than one
-        return "";
+        return "1";
     }
 
     // now we have only one face
     auto face = face_info[0];
     // generate a rect to hold the position
-    cv::Rect rect(face.x1, face.y1, face.x2 - face.x1, face.y2 - face.y1);
+    // we need a slightly bigger rect
+    float x1 = MAX(face.x1 - 30, 0), y1 = MAX(face.y1 - 40, 0);
+    float x2 = MIN(face.x2 + 30, frame.cols), y2 = MIN(face.y2 + 30, frame.rows);
+    cv::Rect rect(x1, y1, x2 - x1, y2 - y1);
     // prepare the filename
     std::string filename = "./img/" + std::to_string(randomEngine()) + ".jpg";
     // save the face into a file
     cv::imwrite(filename, frame(rect));
+    // now draw a rectangle on the frame
+    cv::rectangle(frame, rect, cv::Scalar(0, 0, 255));
     return filename;
 }
