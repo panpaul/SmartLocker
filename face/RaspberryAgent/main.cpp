@@ -57,17 +57,18 @@ int main(int argc, char **argv) {
             std::cout << "task:" << task << std::endl;
 			softPwmWrite(task,5);
 			cout<<"start"<<endl;
-			delay(10000);
+			delay(1000);
 			cout<<"end"<<endl;
 			softPwmWrite(task,15);
+			delay(1000);
         }
 
-        // sleep for 2 seconds
+        // sleep for 1 second
 #if defined(linux) || defined(__LYNX)
-        sleep(2);
+        //sleep(1);
 #endif
 #if defined(_WIN32)
-        Sleep(2000);
+        Sleep(1000);
 #endif
     }
 

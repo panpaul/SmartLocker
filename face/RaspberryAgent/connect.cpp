@@ -30,7 +30,7 @@ std::string uploadImg(const std::string &filepath) {
 
 void getTask(std::vector<int> &vec) {
     std::string param = "&cid=" + std::to_string(config.cid);
-    std::string addr = config.address + "/api/v1/cabinet/task";
+    std::string addr = config.address + "api/v1/cabinet/task";
     std::string r = post(addr, param);
     std::cout << "raw tasks:" << r << std::endl;
 
@@ -46,7 +46,7 @@ void getTask(std::vector<int> &vec) {
 
 bool pingPong() {
     std::string param = "&cid=" + std::to_string(config.cid) + "&regToken=" + config.token;
-    std::string addr = config.address + "/api/v1/cabinet/ping";
+    std::string addr = config.address + "api/v1/cabinet/ping";
     std::string r = post(addr, param);
     std::cout << "raw ping pong:" << r << std::endl;
 
